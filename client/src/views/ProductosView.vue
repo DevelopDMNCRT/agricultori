@@ -1,33 +1,23 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
+import { Icon } from '@iconify/vue'
 import DownloadCTA from '../components/DownloadCTA.vue'
 
-const products = ref([
-  {
-    id: 1,
-    title: 'Protección Respiratoria Avanzada PRO-X',
-    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent elementum urna eu felis consectetur, in congue turpis tempor. Suspendisse potenti. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Nulla posuere est et est commodo, in efficitur tortor rhoncus. Curabitur faucibus ligula ac nunc eleifend, varius vestibulum ex elementum. Etiam quis lacus interdum, bibendum elit eu, malesuada sem.',
-    image: '/cubrebocas.png'
-  },
-  {
-    id: 2,
-    title: 'Filtros de Alto Rendimiento para Agroquímicos',
-    description: 'Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Sed vel urna in tortor venenatis iaculis. Nunc eu felis dui. Ut tristique, nisl sit amet euismod vulputate, lectus quam tincidunt neque, nec scelerisque ex sapien non lorem. Proin a ligula eget leo dignissim pellentesque. Vivamus sodales, diam quis aliquet fringilla, turpis magna facilisis arcu, ut laoreet neque est eget ante.',
-    image: '/cubrebocas.png'
-  },
-  {
-    id: 3,
-    title: 'Equipo de Aislamiento Corporal Completo',
-    description: 'Cras vel elit eget turpis euismod vehicula in at nunc. Suspendisse volutpat nulla condimentum, pretium eros id, luctus nulla. Aenean cursus vehicula magna, viverra ultrices nisi pulvinar et. Curabitur vel leo efficitur, dictum ipsum eu, cursus enim. Donec tincidunt justo nec ex congue ullamcorper. Nam ut mi sapien. Phasellus malesuada felis sit amet eros mattis tempus.',
-    image: '/cubrebocas.png'
-  },
-  {
-    id: 4,
-    title: 'Gafas de Seguridad Anti-empañamiento',
-    description: 'Pellentesque id rutrum libero, in volutpat mauris. Integer sit amet justo dolor. Praesent efficitur elementum libero, ut tincidunt nisl dictum fermentum. Suspendisse lobortis quam a enim sagittis dignissim. Sed a nulla ac lorem cursus faucibus id egestas neque. Nunc ut augue id justo lobortis tempus in a tortor. Suspendisse scelerisque felis sit amet tincidunt commodo.',
-    image: '/cubrebocas.png'
+const API_URL = 'http://localhost:3000/api/productos'
+const products = ref([])
+const loading = ref(true)
+
+onMounted(async () => {
+  try {
+    const res = await fetch(API_URL)
+    const data = await res.json()
+    products.value = data
+  } catch (error) {
+    console.error('Error fetching productos:', error)
+  } finally {
+    loading.value = false
   }
-])
+})
 </script>
 
 <template>
@@ -46,32 +36,43 @@ const products = ref([
     <!-- ── Product Catalog Grid ──────────────────────── -->
     <section class="catalog-section">
       <div class="container">
-        <div class="product-list">
+        
+        <div v-if="loading" class="text-center py-12">
+          <Icon icon="eos-icons:loading" width="48" height="48" class="text-primary mx-auto" style="color: var(--color-primary);" />
+          <p class="mt-4" style="color: var(--color-text-secondary); font-weight: 500;">Cargando catálogo de productos...</p>
+        </div>
+
+        <div v-else-if="products.length === 0" class="text-center py-12">
+          <Icon icon="ph:package-duotone" width="64" height="64" class="mx-auto" style="color: #a0b0a8; margin-bottom: 1rem;" />
+          <h2 style="font-size: 1.8rem; margin-bottom: 0.5rem; color: var(--color-primary-dark);">Catálogo en preparación</h2>
+          <p style="color: var(--color-text-secondary);">Próximamente agregaremos nuestros productos a esta sección.</p>
+        </div>
+
+        <div v-else class="product-list">
           <!-- Card 2-Columns -->
           <article v-for="product in products" :key="product.id" class="product-card">
             
             <!-- Columna Izquierda: Imagen -->
             <div class="product-image-col">
               <div class="image-wrapper">
-                <img :src="product.image" :alt="product.title" class="product-img" loading="lazy" />
+                <img :src="product.foto_url || '/logo.png'" :alt="product.nombre" class="product-img" loading="lazy" />
               </div>
             </div>
 
             <!-- Columna Derecha: Descripción Técnica -->
             <div class="product-info-col">
-              <h2 class="product-title">{{ product.title }}</h2>
+              <h2 class="product-title">{{ product.nombre }}</h2>
               <div class="product-specs">
-                <span class="spec-badge">Grado Industrial</span>
-                <span class="spec-badge">Protección Agrícola</span>
+                <span v-for="tag in product.tags" :key="tag" class="spec-badge">{{ tag }}</span>
               </div>
-              <p class="product-desc">{{ product.description }}</p>
+              <p class="product-desc">{{ product.descripcion }}</p>
               
               <div class="product-divider"></div>
               
               <ul class="technical-list">
-                <li><strong>Material:</strong> Lorem ipsum dolor sit amet</li>
-                <li><strong>Resistencia:</strong> Consectetur adipiscing elit</li>
-                <li><strong>Certificación:</strong> Sed do eiusmod tempor</li>
+                <li v-if="product.material"><strong>Material:</strong> {{ product.material }}</li>
+                <li v-if="product.resistencia"><strong>Resistencia:</strong> {{ product.resistencia }}</li>
+                <li v-if="product.certificacion"><strong>Certificación:</strong> {{ product.certificacion }}</li>
               </ul>
             </div>
             
