@@ -95,7 +95,7 @@ import { ref, onMounted } from 'vue';
 import AdminLayout from '@/components/layout/AdminLayout.vue';
 import { Eye, Pencil, Trash } from 'lucide-vue-next';
 
-const API_URL = 'http://localhost:3000/api/distribuidoras';
+const API_URL = `${import.meta.env.VITE_API_URL || 'http://localhost:3000'}/api/distribuidoras`;
 
 const distribuidoras = ref<any[]>([]);
 const loading = ref(false);

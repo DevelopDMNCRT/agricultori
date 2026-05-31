@@ -91,7 +91,7 @@ import { ref, onMounted } from 'vue';
 import AdminLayout from '@/components/layout/AdminLayout.vue';
 import { Eye, Pencil, Trash, Image as ImageIcon } from 'lucide-vue-next';
 
-const API_URL = 'http://localhost:3000/api/productos';
+const API_URL = `${import.meta.env.VITE_API_URL || 'http://localhost:3000'}/api/productos`;
 
 const productos = ref<any[]>([]);
 const loading = ref(false);

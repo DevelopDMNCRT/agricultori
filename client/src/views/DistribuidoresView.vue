@@ -7,7 +7,7 @@ import DownloadCTA from '../components/DownloadCTA.vue'
 const route = useRoute()
 const router = useRouter()
 
-const API_URL = 'http://localhost:3000/api/distribuidoras'
+const API_URL = `${import.meta.env.VITE_API_URL || 'http://localhost:3000'}/api/distribuidoras`
 const distribuidores = ref([])
 const loading = ref(true)
 

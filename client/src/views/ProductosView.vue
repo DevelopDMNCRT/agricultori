@@ -3,7 +3,7 @@ import { ref, onMounted } from 'vue'
 import { Icon } from '@iconify/vue'
 import DownloadCTA from '../components/DownloadCTA.vue'
 
-const API_URL = 'http://localhost:3000/api/productos'
+const API_URL = `${import.meta.env.VITE_API_URL || 'http://localhost:3000'}/api/productos`
 const products = ref([])
 const loading = ref(true)
 

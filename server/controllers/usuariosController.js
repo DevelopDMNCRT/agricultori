@@ -141,4 +141,44 @@ const deleteUsuario = async (req, res) => {
   }
 };
 
-module.exports = { getUsuarios, getUsuario, createUsuario, updateUsuario, deleteUsuario };
+// POST login user
+const loginUsuario = async (req, res) => {
+  try {
+    const bcrypt = require('bcryptjs');
+    const jwt = require('jsonwebtoken');
+    const { correo, contrasena } = req.body;
+
+    if (!correo || !contrasena) {
+      return res.status(400).json({ error: 'Correo y contraseña son requeridos' });
+    }
+
+    const result = await pool.query(
+      'SELECT id, nombre, correo, contrasena FROM usuarios WHERE correo = $1 AND deleted_at IS NULL',
+      [correo]
+    );
+
+    if (result.rows.length === 0) {
+      return res.status(401).json({ error: 'Credenciales incorrectas' });
+    }
+
+    const user = result.rows[0];
+    const isMatch = await bcrypt.compare(contrasena, user.contrasena);
+
+    if (!isMatch) {
+      return res.status(401).json({ error: 'Credenciales incorrectas' });
+    }
+
+    const token = jwt.sign(
+      { id: user.id, nombre: user.nombre, correo: user.correo },
+      process.env.JWT_SECRET || 'agricultori_secret_key',
+      { expiresIn: '1d' }
+    );
+
+    res.json({ token, user: { id: user.id, nombre: user.nombre, correo: user.correo } });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Error al iniciar sesión' });
+  }
+};
+
+module.exports = { getUsuarios, getUsuario, createUsuario, updateUsuario, deleteUsuario, loginUsuario };

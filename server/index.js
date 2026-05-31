@@ -69,14 +69,17 @@ const initDB = async () => {
       );
     `);
     console.log('✅ Tablas listas en la base de datos');
-    
-    app.listen(PORT, () => {
-      console.log(`🚀 Servidor corriendo en http://localhost:${PORT}`);
-    });
   } catch (err) {
     console.error('❌ Error al inicializar la base de datos:', err.message);
-    process.exit(1);
   }
 };
 
-initDB();
+if (process.env.NODE_ENV !== 'production') {
+  initDB().then(() => {
+    app.listen(PORT, () => {
+      console.log(`🚀 Servidor corriendo en http://localhost:${PORT}`);
+    });
+  });
+}
+
+module.exports = app;

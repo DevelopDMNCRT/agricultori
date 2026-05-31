@@ -171,7 +171,7 @@ import AdminLayout from '@/components/layout/AdminLayout.vue';
 import Modal from '@/components/ui/Modal.vue';
 import { Eye, Pencil, Trash } from 'lucide-vue-next';
 
-const API_URL = 'http://localhost:3000/api/usuarios';
+const API_URL = `${import.meta.env.VITE_API_URL || 'http://localhost:3000'}/api/usuarios`;
 
 const isModalOpen = ref(false);
 const modalMode = ref<'add' | 'edit' | 'view'>('add');
