@@ -33,12 +33,13 @@
     <!-- Main Header Content -->
     <div class="main-header-content">
       <div class="container header-container">
-        <router-link to="/" class="logo">
+        <router-link to="/productos" class="logo">
           <img src="/logo.png" alt="Agricultori Logo" class="logo-img" />
         </router-link>
 
         <!-- Desktop Nav -->
         <nav class="desktop-nav">
+          <router-link to="/" class="nav-link">Inicio</router-link>
           <router-link to="/productos" class="nav-link">Productos</router-link>
           
           <!-- Distribuidores dropdown -->
@@ -101,6 +102,7 @@
       <div v-if="isMenuOpen" class="mobile-drawer" @click="closeMenu">
         <div class="drawer-content" @click.stop>
           <nav class="mobile-nav">
+            <router-link to="/" class="mobile-link" @click="closeMenu">Inicio</router-link>
             <router-link to="/productos" class="mobile-link" @click="closeMenu">Productos</router-link>
             
             <!-- Distribuidores acordeón mobile -->

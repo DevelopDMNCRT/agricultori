@@ -12,7 +12,7 @@ import { Icon } from '@iconify/vue'
       <div class="footer-grid">
         <!-- Brand Info Column -->
         <div class="footer-col brand-col">
-          <router-link to="/" class="footer-logo-link">
+          <router-link to="/productos" class="footer-logo-link">
             <div class="logo-wrapper">
               <img src="/logo.png" alt="Agricultori Logo" class="footer-logo" />
             </div>
