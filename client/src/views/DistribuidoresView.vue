@@ -152,7 +152,7 @@ const getMapUrl = (domicilio) => {
 
 <style scoped>
 .distribuidores-view {
-  padding-top: 110px;
+  padding-top: 150px;
   background-color: #f7f9f8;
   min-height: 100vh;
   display: flex;

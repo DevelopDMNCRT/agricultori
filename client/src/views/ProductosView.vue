@@ -95,7 +95,7 @@ onMounted(async () => {
 }
 
 .hero-container {
-  padding-top: 110px; /* Space for fixed header */
+  padding-top: 150px; /* Space for fixed header */
   background-color: var(--color-bg-base);
 }
 

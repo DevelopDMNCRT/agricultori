@@ -95,7 +95,7 @@ const wordIcon = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fi
 </template>
 
 <style scoped>
-.page-padding { padding-top: 130px; }
+.page-padding { padding-top: 150px; }
 
 /* ── Hero ──────────────────────────────────────────── */
 .bit-hero {

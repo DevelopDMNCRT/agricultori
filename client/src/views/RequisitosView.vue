@@ -308,7 +308,7 @@ const totalPct     = computed(() => Math.round((totalChecked.value / totalItems.
 </template>
 
 <style scoped>
-.page-padding { padding-top: 130px; }
+.page-padding { padding-top: 150px; }
 
 /* ── Hero ──────────────────────────────────────────── */
 .req-hero {

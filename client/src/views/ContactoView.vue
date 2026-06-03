@@ -15,6 +15,6 @@ import DownloadCTA from '../components/DownloadCTA.vue'
 
 <style scoped>
 .contacto-page {
-  padding-top: 130px; /* Accounts for fixed top-bar + header height */
+  padding-top: 150px; /* Accounts for fixed top-bar + header height */
 }
 </style>

@@ -34,7 +34,7 @@ function reopenVideo() {
 
 <style scoped>
 .page-padding {
-  padding-top: 130px; /* Accounts for fixed top-bar + header height */
+  padding-top: 150px; /* Accounts for fixed top-bar + header height */
 }
 
 .app-section-intro {

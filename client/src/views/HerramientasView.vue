@@ -14,6 +14,6 @@ import DownloadCTA from '../components/DownloadCTA.vue'
 
 <style scoped>
 .page-padding {
-  padding-top: 130px; /* Accounts for fixed top-bar + header height */
+  padding-top: 150px; /* Accounts for fixed top-bar + header height */
 }
 </style>
