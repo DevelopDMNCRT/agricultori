@@ -47,8 +47,8 @@ const initDB = async () => {
         estado VARCHAR(100) NOT NULL,
         ciudad VARCHAR(100) NOT NULL,
         domicilio TEXT NOT NULL,
+        referencias TEXT,
         telefono CHAR(10) NOT NULL,
-        foto_url TEXT,
         created_at TIMESTAMP DEFAULT NOW(),
         edited_at TIMESTAMP,
         deleted_at TIMESTAMP

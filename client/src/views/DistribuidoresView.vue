@@ -116,10 +116,7 @@ const getMapUrl = (domicilio) => {
             
             <div class="card-logo-container">
               <div class="card-logo">
-                <img v-if="dist.foto_url" :src="dist.foto_url" :alt="dist.nombre" />
-                <div v-else class="fallback-logo">
-                  <img src="/logo.png" alt="Agricultori" />
-                </div>
+                <img src="/location-icon.jpg" :alt="dist.nombre" />
               </div>
             </div>
             
@@ -129,6 +126,10 @@ const getMapUrl = (domicilio) => {
               <div class="info-row">
                 <Icon icon="ph:map-pin-duotone" class="info-icon" />
                 <span>{{ dist.domicilio }}</span>
+              </div>
+              <div v-if="dist.referencias" class="info-row">
+                <Icon icon="ph:info-duotone" class="info-icon" />
+                <span class="text-xs text-gray-500">{{ dist.referencias }}</span>
               </div>
               <div class="info-row">
                 <Icon icon="ph:phone-call-duotone" class="info-icon" />

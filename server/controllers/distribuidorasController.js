@@ -6,7 +6,7 @@ const fs = require('fs');
 const getDistribuidoras = async (req, res) => {
   try {
     const result = await pool.query(
-      'SELECT id, nombre, estado, ciudad, domicilio, telefono, foto_url, created_at, edited_at FROM distribuidoras WHERE deleted_at IS NULL ORDER BY created_at DESC'
+      'SELECT id, nombre, estado, ciudad, domicilio, referencias, telefono, created_at, edited_at FROM distribuidoras WHERE deleted_at IS NULL ORDER BY created_at DESC'
     );
     res.json(result.rows);
   } catch (err) {
@@ -20,7 +20,7 @@ const getDistribuidora = async (req, res) => {
   try {
     const { id } = req.params;
     const result = await pool.query(
-      'SELECT id, nombre, estado, ciudad, domicilio, telefono, foto_url, created_at, edited_at FROM distribuidoras WHERE id = $1 AND deleted_at IS NULL',
+      'SELECT id, nombre, estado, ciudad, domicilio, referencias, telefono, created_at, edited_at FROM distribuidoras WHERE id = $1 AND deleted_at IS NULL',
       [id]
     );
     if (result.rows.length === 0) {
@@ -36,15 +36,10 @@ const getDistribuidora = async (req, res) => {
 // POST create distribuidora
 const createDistribuidora = async (req, res) => {
   try {
-    const { nombre, estado, ciudad, domicilio, telefono } = req.body;
-    let foto_url = null;
-
-    if (req.file) {
-      foto_url = req.file.path; // Cloudinary returns the full URL here
-    }
+    const { nombre, estado, ciudad, domicilio, referencias, telefono } = req.body;
 
     if (!nombre || !estado || !ciudad || !domicilio || !telefono) {
-      return res.status(400).json({ error: 'Todos los campos son requeridos excepto la foto' });
+      return res.status(400).json({ error: 'Todos los campos son requeridos' });
     }
 
     if (!/^[0-9]{10}$/.test(telefono)) {
@@ -52,10 +47,10 @@ const createDistribuidora = async (req, res) => {
     }
 
     const result = await pool.query(
-      `INSERT INTO distribuidoras (nombre, estado, ciudad, domicilio, telefono, foto_url)
+      `INSERT INTO distribuidoras (nombre, estado, ciudad, domicilio, referencias, telefono)
        VALUES ($1, $2, $3, $4, $5, $6)
-       RETURNING id, nombre, estado, ciudad, domicilio, telefono, foto_url, created_at`,
-      [nombre, estado, ciudad, domicilio, telefono, foto_url]
+       RETURNING id, nombre, estado, ciudad, domicilio, referencias, telefono, created_at`,
+      [nombre, estado, ciudad, domicilio, referencias || null, telefono]
     );
 
     res.status(201).json(result.rows[0]);
@@ -69,23 +64,16 @@ const createDistribuidora = async (req, res) => {
 const updateDistribuidora = async (req, res) => {
   try {
     const { id } = req.params;
-    const { nombre, estado, ciudad, domicilio, telefono } = req.body;
+    const { nombre, estado, ciudad, domicilio, referencias, telefono } = req.body;
     
     // Check if it exists
-    const exists = await pool.query('SELECT foto_url FROM distribuidoras WHERE id = $1 AND deleted_at IS NULL', [id]);
+    const exists = await pool.query('SELECT id FROM distribuidoras WHERE id = $1 AND deleted_at IS NULL', [id]);
     if (exists.rows.length === 0) {
       return res.status(404).json({ error: 'Distribuidora no encontrada' });
     }
 
-    let foto_url = exists.rows[0].foto_url;
-
-    // If new file uploaded, update photo url (Cloudinary deletion of old image is skipped for simplicity)
-    if (req.file) {
-      foto_url = req.file.path;
-    }
-
     if (!nombre || !estado || !ciudad || !domicilio || !telefono) {
-      return res.status(400).json({ error: 'Todos los campos son requeridos excepto la foto' });
+      return res.status(400).json({ error: 'Todos los campos son requeridos' });
     }
 
     if (!/^[0-9]{10}$/.test(telefono)) {
@@ -94,10 +82,10 @@ const updateDistribuidora = async (req, res) => {
 
     const result = await pool.query(
       `UPDATE distribuidoras
-       SET nombre = $1, estado = $2, ciudad = $3, domicilio = $4, telefono = $5, foto_url = $6, edited_at = NOW()
+       SET nombre = $1, estado = $2, ciudad = $3, domicilio = $4, referencias = $5, telefono = $6, edited_at = NOW()
        WHERE id = $7 AND deleted_at IS NULL
-       RETURNING id, nombre, estado, ciudad, domicilio, telefono, foto_url, edited_at`,
-      [nombre, estado, ciudad, domicilio, telefono, foto_url, id]
+       RETURNING id, nombre, estado, ciudad, domicilio, referencias, telefono, edited_at`,
+      [nombre, estado, ciudad, domicilio, referencias || null, telefono, id]
     );
 
     res.json(result.rows[0]);

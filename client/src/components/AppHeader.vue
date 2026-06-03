@@ -200,7 +200,9 @@ onUnmounted(() => {
   z-index: 1000;
   transition: var(--transition-smooth);
   border-bottom: 1px solid transparent;
-  background-color: transparent;
+  background-color: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
 }
 
 .site-header.scrolled {

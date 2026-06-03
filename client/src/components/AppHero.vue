@@ -276,21 +276,21 @@ const slides = [
   {
     id: "empaques",
     badge: "Empresas Fitosanitarias",
-    titleHTML: `<span class="text-accent">Empresas</span><br/><span class="text-primary-dark">de empaques</span>`,
+    titleHTML: `<span>Empresas</span><br/><span>de empaques</span>`,
     desc: "Valida al instante los establecimientos autorizados por la USDA / FDA para procesar y exportar fruta a Estados Unidos sin demoras.",
     themeClass: "theme-empaques"
   },
   {
     id: "descarga",
     badge: "Del Campo a tus Manos",
-    titleHTML: `<span class="text-primary-dark">¡Del campo</span><br/><span class="text-primary-dark">a tus manos!</span><br/><span class="text-accent">Descarga la App</span>`,
+    titleHTML: `<span>¡Del campo</span><br/><span>a tus manos!</span><br/><span>Descarga la App</span>`,
     desc: "Buscador de agroquímicos autorizados, alertas aduanales en vivo y directorios oficiales. 100% gratuito y libre de suscripciones.",
     themeClass: "theme-descarga"
   },
   {
     id: "quimicos",
     badge: "Cumplimiento Regulatorio",
-    titleHTML: `<span class="text-primary-dark">Químicos</span><br/><span class="text-primary-dark">autorizados</span><br/><span class="text-accent">para siembra</span>`,
+    titleHTML: `<span>Químicos</span><br/><span>autorizados</span><br/><span>para siembra</span>`,
     desc: "Verifica qué pesticidas, herbicidas y técnicos cumplen con los estándares fitosanitarios exigidos por la EPA y FDA en la frontera norte.",
     themeClass: "theme-quimicos"
   }
@@ -331,8 +331,8 @@ onUnmounted(() => {
 .hero-section {
   position: relative;
   padding: 10rem 0 7rem;
-  background-color: #f2f7f4;
-  color: var(--color-text-primary);
+  background-color: var(--color-primary);
+  color: #ffffff;
   overflow: hidden;
   min-height: 100vh;
   display: flex;
@@ -397,28 +397,28 @@ onUnmounted(() => {
   bottom: 0;
 }
 
-/* Theme background coloring and diagonal splits with lighter tones */
+/* Theme background coloring and diagonal splits with solid brand colors */
 .theme-empaques {
-  background: linear-gradient(135deg, #f3f7f4 0%, #dae7df 100%); /* Light green base */
+  background: var(--color-primary); /* Solid green */
 }
 .theme-empaques .diagonal-bg {
-  background: linear-gradient(135deg, #fffaf4 0%, #ffe9c4 100%); /* Lighter orange on the right */
+  background: var(--color-accent); /* Solid orange */
   clip-path: polygon(55% 0, 100% 0, 100% 100%, 35% 100%);
 }
 
 .theme-descarga {
-  background: linear-gradient(135deg, #fffaf4 0%, #ffe9c4 100%); /* Lighter orange base */
+  background: var(--color-accent); /* Solid orange */
 }
 .theme-descarga .diagonal-bg {
-  background: linear-gradient(135deg, #f3f7f4 0%, #dae7df 100%); /* Light green gradient on left */
+  background: var(--color-primary); /* Solid green */
   clip-path: polygon(0 0, 42% 0, 28% 100%, 0 100%);
 }
 
 .theme-quimicos {
-  background: linear-gradient(135deg, #fffaf4 0%, #ffe9c4 100%); /* Lighter orange base */
+  background: var(--color-accent); /* Solid orange */
 }
 .theme-quimicos .diagonal-bg {
-  background: linear-gradient(135deg, #f3f7f4 0%, #dae7df 100%); /* Light green on left */
+  background: var(--color-primary); /* Solid green */
   clip-path: polygon(0 0, 40% 0, 52% 100%, 0 100%);
 }
 
@@ -467,15 +467,15 @@ onUnmounted(() => {
   display: inline-flex;
   align-items: center;
   gap: 0.75rem;
-  background: rgba(0, 67, 44, 0.05);
-  border: 1px solid rgba(0, 67, 44, 0.1);
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.3);
   padding: 0.6rem 1.25rem;
   border-radius: var(--border-radius-full);
   font-family: var(--font-title);
   font-weight: 700;
   font-size: 0.85rem;
   width: fit-content;
-  color: var(--color-primary);
+  color: #ffffff;
   backdrop-filter: blur(8px);
 }
 
@@ -514,7 +514,7 @@ onUnmounted(() => {
 
 .hero-description {
   font-size: 1.15rem;
-  color: var(--color-text-secondary);
+  color: #ffffff;
   max-width: 580px;
   line-height: 1.6;
 }
