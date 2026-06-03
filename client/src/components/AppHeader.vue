@@ -1,5 +1,5 @@
 <template>
-  <header :class="['site-header', { 'scrolled': isScrolled }]">
+  <header :class="['site-header', { 'scrolled': isScrolled, 'is-home': isHome }]">
     <!-- Top Header Bar -->
     <div class="top-header-bar">
       <div class="container top-header-container">
@@ -146,6 +146,10 @@
 
 <script setup>
 import { ref, onMounted, onUnmounted, computed } from 'vue'
+import { useRoute } from 'vue-router'
+
+const route = useRoute()
+const isHome = computed(() => route.path === '/')
 
 const isScrolled = ref(false)
 const isMenuOpen = ref(false)
@@ -200,6 +204,10 @@ onUnmounted(() => {
   z-index: 1000;
   transition: var(--transition-smooth);
   border-bottom: 1px solid transparent;
+  background-color: transparent;
+}
+
+.site-header.is-home:not(.scrolled) {
   background-color: rgba(255, 255, 255, 0.7);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
