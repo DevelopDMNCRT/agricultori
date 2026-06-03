@@ -502,6 +502,7 @@ onUnmounted(() => {
   margin-bottom: 0.5rem;
   font-family: var(--font-title);
   text-transform: uppercase;
+  color: #ffffff;
 }
 
 .text-accent {
@@ -1092,11 +1093,11 @@ onUnmounted(() => {
   
   .diagonal-bg {
     clip-path: none !important;
-    background: linear-gradient(135deg, #f3f7f4 0%, #dae7df 100%) !important;
+    background: transparent !important;
   }
   
-  .theme-descarga, .theme-quimicos {
-    background: linear-gradient(135deg, #f3f7f4 0%, #dae7df 100%) !important;
+  .theme-descarga, .theme-quimicos, .theme-empaques {
+    /* Kept solid from desktop */
   }
   
   .hero-container {
