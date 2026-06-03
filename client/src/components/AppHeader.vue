@@ -82,6 +82,7 @@
             </Transition>
           </div>
 
+          <router-link to="/quienes-somos" class="nav-link">¿Quiénes somos?</router-link>
           <router-link to="/contacto" class="nav-link">Contacto</router-link>
         </nav>
 
@@ -133,6 +134,7 @@
               </Transition>
             </div>
 
+            <router-link to="/quienes-somos" class="mobile-link" @click="closeMenu">¿Quiénes somos?</router-link>
             <router-link to="/contacto" class="mobile-link" @click="closeMenu">Contacto</router-link>
             <a href="#descargar" class="btn btn-accent mobile-cta" @click="closeMenu">Descargar Gratis</a>
           </nav>

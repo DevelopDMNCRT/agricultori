@@ -1,7 +1,6 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { Icon } from '@iconify/vue'
-import DownloadCTA from '../components/DownloadCTA.vue'
 
 const API_URL = `${import.meta.env.VITE_API_URL || 'http://localhost:3000'}/api/productos`
 const products = ref([])
@@ -21,17 +20,22 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div class="page-padding">
-    <!-- ── Hero Section ──────────────────────────────── -->
-    <section class="catalog-hero">
-      <div class="container text-center">
-        <span class="tag">Catálogo</span>
-        <h1>Nuestros Productos</h1>
-        <p class="lead">
-          Conoce nuestra línea de equipos y tecnología de protección diseñada específicamente para el agricultor moderno y sus exigencias diarias.
-        </p>
+  <div class="page-wrapper">
+    <!-- ── Hero Section Boxed ──────────────────────────────── -->
+    <div class="hero-container">
+      <div class="container">
+        <section class="catalog-hero-boxed">
+          <div class="hero-overlay"></div>
+          <div class="hero-content text-center">
+            <span class="tag">Catálogo</span>
+            <h1>Nuestros Productos</h1>
+            <p class="lead">
+              Conoce nuestra línea de equipos y tecnología de protección diseñada específicamente para el agricultor moderno y sus exigencias diarias.
+            </p>
+          </div>
+        </section>
       </div>
-    </section>
+    </div>
 
     <!-- ── Product Catalog Grid ──────────────────────── -->
     <section class="catalog-section">
@@ -80,19 +84,44 @@ onMounted(async () => {
         </div>
       </div>
     </section>
-
-    <DownloadCTA />
   </div>
 </template>
 
 <style scoped>
-.page-padding { padding-top: 130px; }
+.page-wrapper { 
+  display: flex;
+  flex-direction: column;
+  background-color: var(--color-bg-base);
+}
 
-/* ── Hero ──────────────────────────────────────────── */
-.catalog-hero {
-  padding: 5rem 0 4rem;
-  background: linear-gradient(135deg, #dae6df 0%, #c2d5cd 100%);
-  border-bottom: 1px solid rgba(0,67,44,0.08);
+.hero-container {
+  padding-top: 110px; /* Space for fixed header */
+  background-color: var(--color-bg-base);
+}
+
+/* ── Hero Boxed ──────────────────────────────────────────── */
+.catalog-hero-boxed {
+  position: relative;
+  margin-top: 15px;
+  padding: 6rem 2rem;
+  border-radius: var(--border-radius-lg);
+  overflow: hidden;
+  background-image: url('/slide-productos-1.jpg');
+  background-size: cover;
+  background-position: center;
+  box-shadow: var(--shadow-lg);
+}
+
+.hero-overlay {
+  position: absolute;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background: linear-gradient(to bottom, rgba(0,25,15,0.3) 0%, rgba(0,67,44,0.85) 100%);
+  z-index: 1;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 2;
 }
 
 .tag {
@@ -102,30 +131,33 @@ onMounted(async () => {
   font-weight: 800;
   text-transform: uppercase;
   color: var(--color-accent);
-  background-color: rgba(251, 134, 3, 0.12);
+  background-color: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(8px);
   padding: 0.5rem 1.25rem;
   border-radius: var(--border-radius-full);
   margin-bottom: 1.5rem;
   letter-spacing: 1.5px;
-  border: 1px solid rgba(251, 134, 3, 0.2);
+  border: 1px solid rgba(251, 134, 3, 0.4);
 }
 
-.catalog-hero h1 {
+.catalog-hero-boxed h1 {
   font-family: var(--font-title);
-  font-size: clamp(2.5rem, 5vw, 3.5rem);
+  font-size: clamp(2.5rem, 5vw, 4rem);
   font-weight: 900;
-  color: var(--color-primary-dark);
+  color: #ffffff;
   letter-spacing: -0.03em;
   margin-bottom: 1.25rem;
+  text-shadow: 0 4px 15px rgba(0,0,0,0.3);
 }
 
-.catalog-hero .lead {
+.catalog-hero-boxed .lead {
   font-family: var(--font-body);
   font-size: 1.15rem;
-  color: var(--color-text-secondary);
+  color: rgba(255, 255, 255, 0.9);
   line-height: 1.6;
   max-width: 650px;
   margin: 0 auto;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.3);
 }
 
 /* ── Catalog Section ───────────────────────────────── */

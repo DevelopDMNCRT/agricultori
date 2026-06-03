@@ -3,6 +3,7 @@ import HomeView from './views/HomeView.vue'
 import ProductosView from './views/ProductosView.vue'
 import DistribuidoresView from './views/DistribuidoresView.vue'
 import NuestraAppView from './views/NuestraAppView.vue'
+import QuienesSomosView from './views/QuienesSomosView.vue'
 import HerramientasView from './views/HerramientasView.vue'
 import ContactoView from './views/ContactoView.vue'
 
@@ -26,6 +27,11 @@ const routes = [
     path: '/nuestra-app',
     name: 'nuestra-app',
     component: NuestraAppView
+  },
+  {
+    path: '/quienes-somos',
+    name: 'quienes-somos',
+    component: QuienesSomosView
   },
   {
     path: '/herramientas/requisitos',

@@ -3,7 +3,6 @@ import { ref } from 'vue'
 import AppSimulator from '../components/AppSimulator.vue'
 import DownloadCTA from '../components/DownloadCTA.vue'
 import VideoModal from '../components/VideoModal.vue'
-import MisionVision from '../components/MisionVision.vue'
 import NuestraAppFeature from '../components/NuestraAppFeature.vue'
 
 const videoModal = ref(null)
@@ -26,7 +25,6 @@ function reopenVideo() {
       </button>
     </div>
 
-    <MisionVision />
     <NuestraAppFeature />
 
     <AppSimulator />

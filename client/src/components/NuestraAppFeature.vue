@@ -1,149 +1,210 @@
 <template>
   <section class="qsf-section" aria-label="Lo que nos define">
-
     <div class="container">
-
       <!-- Section label -->
       <div class="qsf-label-row">
         <div class="qsf-label-line" aria-hidden="true"></div>
-        <span class="qsf-eyebrow">Lo que nos define</span>
+        <span class="qsf-eyebrow">La única app en el país que te ofrece los siguientes servicios gratuitos</span>
         <div class="qsf-label-line" aria-hidden="true"></div>
       </div>
 
-      <!-- Main grid: two feature blocks -->
+      <!-- Main grid -->
       <div class="qsf-grid">
-
-        <!-- ── BLOQUE 1: Comunidad ──────────────────── -->
-        <div class="qsf-block qsf-block-left">
-
-          <!-- Image -->
-          <div class="qsf-img-wrap">
-            <!-- Decorative ring -->
-            <div class="qsf-ring qsf-ring-green" aria-hidden="true"></div>
-
-            <div class="qsf-img-card">
-              <img
-                src="/quienes-1.jpeg"
-                alt="Apretón de manos — Comunidad de confianza y apoyo entre agricultores"
-                class="qsf-img"
-                loading="lazy"
-              />
-              <!-- Overlay chip -->
-              <div class="qsf-chip qsf-chip-green">
-                <span class="qsf-chip-dot"></span>
-                Comunidad activa
+        <template v-for="(pair, index) in featurePairs" :key="index">
+          
+          <!-- Left Block -->
+          <div class="qsf-block qsf-block-left">
+            <!-- Image -->
+            <div class="qsf-img-wrap">
+              <div :class="['qsf-ring', `qsf-ring-${pair[0].theme}`]" aria-hidden="true"></div>
+              <div :class="['qsf-img-card', pair[0].theme === 'amber' ? 'qsf-img-card-amber' : '']">
+                <img :src="pair[0].image" :alt="pair[0].imageAlt" class="qsf-img" loading="lazy" />
+                <div :class="['qsf-chip', `qsf-chip-${pair[0].theme}`]">
+                  <span :class="['qsf-chip-dot', pair[0].theme === 'amber' ? 'qsf-chip-dot-amber' : '']"></span>
+                  {{ pair[0].chip }}
+                </div>
+              </div>
+              <div class="qsf-stat-float qsf-stat-left">
+                <span :class="['qsf-stat-num', pair[0].theme === 'amber' ? 'qsf-num-amber' : '']">{{ pair[0].statNum }}</span>
+                <div class="qsf-stat-text">
+                  <span class="qsf-stat-title">{{ pair[0].statTitle }}</span>
+                  <span class="qsf-stat-sub">{{ pair[0].statSub }}</span>
+                </div>
               </div>
             </div>
 
-            <!-- Floating stat card -->
-            <div class="qsf-stat-float qsf-stat-left">
-              <span class="qsf-stat-num">+</span>
-              <div class="qsf-stat-text">
-                <span class="qsf-stat-title">Apoyo</span>
-                <span class="qsf-stat-sub">entre agricultores</span>
-              </div>
+            <!-- Text -->
+            <div class="qsf-text">
+              <h3 class="qsf-title" v-html="pair[0].title"></h3>
+              <p class="qsf-desc">{{ pair[0].desc }}</p>
+              <ul class="qsf-list">
+                <li v-for="bullet in pair[0].bullets" :key="bullet">
+                  <span :class="['qsf-list-dot', `qsf-dot-${pair[0].theme}`]"></span>
+                  {{ bullet }}
+                </li>
+              </ul>
             </div>
           </div>
 
-          <!-- Text -->
-          <div class="qsf-text">
-            <h3 class="qsf-title">
-              Comunidad de <em class="qsf-em">confianza</em>
-            </h3>
-            <p class="qsf-desc">
-              Creemos en el poder del campo unido. Agricultori nace del agricultor y para el agricultor, construyendo redes de apoyo que fortalecen a toda la comunidad agrícola nacional.
-            </p>
-            <ul class="qsf-list">
-              <li>
-                <span class="qsf-list-dot qsf-dot-green"></span>
-                Información accesible para todos
-              </li>
-              <li>
-                <span class="qsf-list-dot qsf-dot-green"></span>
-                Conexión productor–exportador
-              </li>
-              <li>
-                <span class="qsf-list-dot qsf-dot-green"></span>
-                Soporte sin costo ni suscripciones
-              </li>
-            </ul>
+          <!-- Vertical divider -->
+          <div class="qsf-vdivider" aria-hidden="true">
+            <div class="qsf-vline"></div>
+            <div class="qsf-vdot"></div>
+            <div class="qsf-vline"></div>
           </div>
 
-        </div>
-
-        <!-- Vertical divider -->
-        <div class="qsf-vdivider" aria-hidden="true">
-          <div class="qsf-vline"></div>
-          <div class="qsf-vdot"></div>
-          <div class="qsf-vline"></div>
-        </div>
-
-        <!-- ── BLOQUE 2: Tecnología ─────────────────── -->
-        <div class="qsf-block qsf-block-right">
-
-          <!-- Text (left of image on this block) -->
-          <div class="qsf-text">
-            <h3 class="qsf-title">
-              Tecnología para el <em class="qsf-em qsf-em-amber">campo moderno</em>
-            </h3>
-            <p class="qsf-desc">
-              Herramientas inteligentes diseñadas con las necesidades reales del agricultor: desde brújula y altímetro hasta precios del mercado, todo en la palma de su mano.
-            </p>
-            <ul class="qsf-list">
-              <li>
-                <span class="qsf-list-dot qsf-dot-amber"></span>
-                Brújula y altímetro integrados
-              </li>
-              <li>
-                <span class="qsf-list-dot qsf-dot-amber"></span>
-                Precisión GPS ± 5 m
-              </li>
-              <li>
-                <span class="qsf-list-dot qsf-dot-amber"></span>
-                Datos guardados sin conexión
-              </li>
-            </ul>
-          </div>
-
-          <!-- Image -->
-          <div class="qsf-img-wrap">
-            <!-- Decorative ring -->
-            <div class="qsf-ring qsf-ring-amber" aria-hidden="true"></div>
-
-            <div class="qsf-img-card qsf-img-card-amber">
-              <img
-                src="/quienes-2.jpeg"
-                alt="Brújula y altímetro — herramientas tecnológicas de Agricultori"
-                class="qsf-img qsf-img-contain"
-                loading="lazy"
-              />
-              <!-- Overlay chip -->
-              <div class="qsf-chip qsf-chip-amber">
-                <span class="qsf-chip-dot qsf-chip-dot-amber"></span>
-                Tecnología en campo
-              </div>
+          <!-- Right Block -->
+          <div class="qsf-block qsf-block-right" v-if="pair[1]">
+            <!-- Text (left of image on this block) -->
+            <div class="qsf-text">
+              <h3 class="qsf-title" v-html="pair[1].title"></h3>
+              <p class="qsf-desc">{{ pair[1].desc }}</p>
+              <ul class="qsf-list">
+                <li v-for="bullet in pair[1].bullets" :key="bullet">
+                  <span :class="['qsf-list-dot', `qsf-dot-${pair[1].theme}`]"></span>
+                  {{ bullet }}
+                </li>
+              </ul>
             </div>
 
-            <!-- Floating stat card -->
-            <div class="qsf-stat-float qsf-stat-right">
-              <span class="qsf-stat-num qsf-num-amber">±5m</span>
-              <div class="qsf-stat-text">
-                <span class="qsf-stat-title">Precisión GPS</span>
-                <span class="qsf-stat-sub">Altitud y coordenadas</span>
+            <!-- Image -->
+            <div class="qsf-img-wrap">
+              <div :class="['qsf-ring', `qsf-ring-${pair[1].theme}`]" aria-hidden="true"></div>
+              <div :class="['qsf-img-card', pair[1].theme === 'amber' ? 'qsf-img-card-amber' : '']">
+                <!-- Using qsf-img instead of qsf-img-contain here for consistency across all generic photos -->
+                <img :src="pair[1].image" :alt="pair[1].imageAlt" class="qsf-img" loading="lazy" />
+                <div :class="['qsf-chip', `qsf-chip-${pair[1].theme}`]">
+                  <span :class="['qsf-chip-dot', pair[1].theme === 'amber' ? 'qsf-chip-dot-amber' : '']"></span>
+                  {{ pair[1].chip }}
+                </div>
+              </div>
+              <div class="qsf-stat-float qsf-stat-right">
+                <span :class="['qsf-stat-num', pair[1].theme === 'amber' ? 'qsf-num-amber' : '']">{{ pair[1].statNum }}</span>
+                <div class="qsf-stat-text">
+                  <span class="qsf-stat-title">{{ pair[1].statTitle }}</span>
+                  <span class="qsf-stat-sub">{{ pair[1].statSub }}</span>
+                </div>
               </div>
             </div>
           </div>
+          
+          <div class="qsf-block" v-else></div>
 
-        </div>
-
+        </template>
       </div>
-
     </div>
   </section>
 </template>
 
 <script setup>
-// No JS needed — purely visual section
+import { ref, computed } from 'vue'
+
+const features = ref([
+  {
+    title: 'Comunidad de <em class="qsf-em">confianza</em>',
+    desc: 'Creemos en el poder del campo unido. Agricultori nace del agricultor y para el agricultor, construyendo redes de apoyo.',
+    image: '/01.jpeg',
+    imageAlt: 'Imagen 1',
+    theme: 'green',
+    chip: 'Comunidad activa',
+    statNum: '+',
+    statTitle: 'Apoyo',
+    statSub: 'entre agricultores',
+    bullets: ['Información accesible', 'Conexión directa', 'Soporte sin costo']
+  },
+  {
+    title: 'Tecnología para el <em class="qsf-em qsf-em-amber">campo</em>',
+    desc: 'Herramientas inteligentes diseñadas con las necesidades reales del agricultor. Innovación en la palma de tu mano.',
+    image: '/02.jpeg',
+    imageAlt: 'Imagen 2',
+    theme: 'amber',
+    chip: 'Tecnología',
+    statNum: '100%',
+    statTitle: 'Precisión',
+    statSub: 'en cada paso',
+    bullets: ['Integración fácil', 'Resultados exactos', 'Guardado seguro']
+  },
+  {
+    title: 'Gestión <em class="qsf-em">eficiente</em>',
+    desc: 'Mantén el control de todos tus procesos agrícolas desde un solo lugar de forma centralizada y segura.',
+    image: '/03.jpeg',
+    imageAlt: 'Imagen 3',
+    theme: 'green',
+    chip: 'Gestión total',
+    statNum: '24h',
+    statTitle: 'Disponibilidad',
+    statSub: 'todo el día',
+    bullets: ['Monitoreo constante', 'Alertas tempranas', 'Informes detallados']
+  },
+  {
+    title: 'Crecimiento <em class="qsf-em qsf-em-amber">sostenible</em>',
+    desc: 'Te ayudamos a adoptar prácticas que benefician tanto a tu bolsillo como al medio ambiente.',
+    image: '/04.jpeg',
+    imageAlt: 'Imagen 4',
+    theme: 'amber',
+    chip: 'Sostenibilidad',
+    statNum: 'ECO',
+    statTitle: 'Prácticas',
+    statSub: 'verdes',
+    bullets: ['Ahorro de recursos', 'Impacto positivo', 'Certificaciones']
+  },
+  {
+    title: 'Conexión <em class="qsf-em">directa</em>',
+    desc: 'Eliminamos a los intermediarios para que puedas negociar tus productos con las mejores condiciones.',
+    image: '/05.jpeg',
+    imageAlt: 'Imagen 5',
+    theme: 'green',
+    chip: 'Mercado directo',
+    statNum: 'Top',
+    statTitle: 'Rentabilidad',
+    statSub: 'asegurada',
+    bullets: ['Mejores precios', 'Negociación justa', 'Pagos rápidos']
+  },
+  {
+    title: 'Análisis de <em class="qsf-em qsf-em-amber">datos</em>',
+    desc: 'Toma decisiones informadas basadas en datos reales de tu campo y predicciones meteorológicas.',
+    image: '/06.jpeg',
+    imageAlt: 'Imagen 6',
+    theme: 'amber',
+    chip: 'Inteligencia',
+    statNum: 'AI',
+    statTitle: 'Predicciones',
+    statSub: 'exactas',
+    bullets: ['Clima en tiempo real', 'Análisis de suelo', 'Proyección de cosecha']
+  },
+  {
+    title: 'Soporte <em class="qsf-em">especializado</em>',
+    desc: 'Contamos con un equipo de agrónomos y expertos dispuestos a asesorarte en cualquier momento.',
+    image: '/07.jpeg',
+    imageAlt: 'Imagen 7',
+    theme: 'green',
+    chip: 'Asesoría',
+    statNum: '+50',
+    statTitle: 'Expertos',
+    statSub: 'a tu servicio',
+    bullets: ['Consultas rápidas', 'Diagnóstico remoto', 'Visitas guiadas']
+  },
+  {
+    title: 'Visión de <em class="qsf-em qsf-em-amber">futuro</em>',
+    desc: 'Preparando el terreno de hoy para las generaciones de mañana con la mejor tecnología.',
+    image: '/08.jpeg',
+    imageAlt: 'Imagen 8',
+    theme: 'amber',
+    chip: 'Innovación',
+    statNum: '∞',
+    statTitle: 'Evolución',
+    statSub: 'constante',
+    bullets: ['Nuevas funciones', 'Actualizaciones', 'Mejora continua']
+  }
+])
+
+const featurePairs = computed(() => {
+  const pairs = []
+  for (let i = 0; i < features.value.length; i += 2) {
+    pairs.push([features.value[i], features.value[i + 1]])
+  }
+  return pairs
+})
 </script>
 
 <style scoped>
@@ -200,7 +261,8 @@
 .qsf-grid {
   display: grid;
   grid-template-columns: 1fr auto 1fr;
-  gap: 0;
+  row-gap: 160px;
+  column-gap: 0;
   align-items: center;
 }
 
