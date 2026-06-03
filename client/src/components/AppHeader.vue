@@ -644,6 +644,14 @@ onUnmounted(() => {
 
 /* Responsive queries */
 @media (max-width: 768px) {
+  .site-header,
+  .site-header.is-home:not(.scrolled),
+  .site-header.scrolled {
+    background-color: #ffffff;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+
   .desktop-nav {
     display: none;
   }

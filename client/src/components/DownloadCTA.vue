@@ -36,7 +36,7 @@ onMounted(() => {
                 </div>
               </a>
               
-              <a href="https://apple.com/app-store" target="_blank" rel="noopener noreferrer" class="store-badge-btn app-store">
+              <a href="https://apps.apple.com/mx/app/agricultori/id1606230336" target="_blank" rel="noopener noreferrer" class="store-badge-btn app-store">
                 <Icon icon="fa6-brands:apple" width="26" height="26" style="color: white;" />
                 <div class="store-info">
                   <span class="store-sub">Consíguelo en el</span>

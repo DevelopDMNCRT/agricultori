@@ -120,7 +120,7 @@
               <span class="mv-store-main">Google Play</span>
             </div>
           </a>
-          <a href="https://apple.com/app-store" target="_blank" rel="noopener noreferrer" class="mv-store-btn mv-apple" id="banner-app-store">
+          <a href="https://apps.apple.com/mx/app/agricultori/id1606230336" target="_blank" rel="noopener noreferrer" class="mv-store-btn mv-apple" id="banner-app-store">
             <Icon icon="fa6-brands:apple" width="22" height="22" style="color: white;" />
             <div class="mv-store-info">
               <span class="mv-store-sub">Consíguelo en el</span>
