@@ -1,22 +1,44 @@
 <script setup>
-import { ref, onMounted } from 'vue'
 import { Icon } from '@iconify/vue'
 
-const API_URL = `${import.meta.env.VITE_API_URL || 'http://localhost:3000'}/api/productos`
-const products = ref([])
-const loading = ref(true)
-
-onMounted(async () => {
-  try {
-    const res = await fetch(API_URL)
-    const data = await res.json()
-    products.value = data
-  } catch (error) {
-    console.error('Error fetching productos:', error)
-  } finally {
-    loading.value = false
-  }
-})
+const catalogProducts = [
+  {
+    id: 1,
+    nombre: 'Mascarilla con Carbón Activado Agricultori Protect',
+    imagen: '/mascarilla.jpg',
+    tags: ['Protección Respiratoria', 'Uso Agrícola'],
+    descripcion: 'Mascarilla de protección respiratoria con dos capas de carbón activado y válvula de exhalación para una respiración más cómoda. Diseñada para ayudar a reducir la exposición a partículas suspendidas, polvo y olores presentes durante actividades agrícolas y aplicaciones de agroquímicos.',
+    caracteristicas: [
+      '2 capas de carbón activado',
+      'Válvula de exhalación de baja resistencia',
+      'Eficiencia de filtración superior al 94%',
+    ]
+  },
+  {
+    id: 2,
+    nombre: 'Overol Desechable Tipo 5/6 Agricultori Protect',
+    imagen: '/traje.jpg',
+    tags: ['Protección Química', 'Uso Agrícola'],
+    descripcion: 'Diseñado para brindar protección confiable durante aplicaciones agrícolas, manejo de agroquímicos y actividades de campo. Su fabricación con costuras selladas ayuda a reducir la exposición a partículas y salpicaduras, mientras que su diseño ligero permite mayor comodidad durante la jornada de trabajo.',
+    caracteristicas: [
+      'Material microporoso transpirable',
+      'Costuras selladas para mayor protección',
+      'Certificación Tipo 5/6 y Categoría III',
+    ]
+  },
+  {
+    id: 3,
+    nombre: 'Guante de Nitrilo Flockline Agricultori Protect',
+    imagen: '/guantes.jpg',
+    tags: ['Resistencia Química', 'Uso Profesional'],
+    descripcion: 'Guante de nitrilo diseñado para trabajos que requieren protección química y resistencia mecánica. Su acabado interior flocado mejora la comodidad durante jornadas prolongadas, mientras que el relieve antiderrapante proporciona un mejor agarre en ambientes húmedos o secos.',
+    caracteristicas: [
+      'Nitrilo 100% libre de látex',
+      'Espesor de 18 milésimas',
+      'Protección química y mecánica certificada',
+    ]
+  },
+]
 </script>
 
 <template>
@@ -40,26 +62,20 @@ onMounted(async () => {
     <!-- ── Product Catalog Grid ──────────────────────── -->
     <section class="catalog-section">
       <div class="container">
-        
-        <div v-if="loading" class="text-center py-12">
-          <Icon icon="eos-icons:loading" width="48" height="48" class="text-primary mx-auto" style="color: var(--color-primary);" />
-          <p class="mt-4" style="color: var(--color-text-secondary); font-weight: 500;">Cargando catálogo de productos...</p>
-        </div>
 
-        <div v-else-if="products.length === 0" class="text-center py-12">
-          <Icon icon="ph:package-duotone" width="64" height="64" class="mx-auto" style="color: #a0b0a8; margin-bottom: 1rem;" />
-          <h2 style="font-size: 1.8rem; margin-bottom: 0.5rem; color: var(--color-primary-dark);">Catálogo en preparación</h2>
-          <p style="color: var(--color-text-secondary);">Próximamente agregaremos nuestros productos a esta sección.</p>
-        </div>
-
-        <div v-else class="product-list">
+        <div class="product-list">
           <!-- Card 2-Columns -->
-          <article v-for="product in products" :key="product.id" class="product-card">
-            
+          <article
+            v-for="(product, index) in catalogProducts"
+            :key="product.id"
+            class="product-card"
+            :class="{ 'reverse': index % 2 !== 0 }"
+          >
+
             <!-- Columna Izquierda: Imagen -->
             <div class="product-image-col">
               <div class="image-wrapper">
-                <img :src="product.foto_url || '/logo.png'" :alt="product.nombre" class="product-img" loading="lazy" />
+                <img :src="product.imagen" :alt="product.nombre" class="product-img" loading="lazy" />
               </div>
             </div>
 
@@ -70,18 +86,17 @@ onMounted(async () => {
                 <span v-for="tag in product.tags" :key="tag" class="spec-badge">{{ tag }}</span>
               </div>
               <p class="product-desc">{{ product.descripcion }}</p>
-              
+
               <div class="product-divider"></div>
-              
+
               <ul class="technical-list">
-                <li v-if="product.material"><strong>Material:</strong> {{ product.material }}</li>
-                <li v-if="product.resistencia"><strong>Resistencia:</strong> {{ product.resistencia }}</li>
-                <li v-if="product.certificacion"><strong>Certificación:</strong> {{ product.certificacion }}</li>
+                <li v-for="item in product.caracteristicas" :key="item">{{ item }}</li>
               </ul>
             </div>
-            
+
           </article>
         </div>
+
       </div>
     </section>
   </div>
@@ -298,6 +313,15 @@ onMounted(async () => {
 .technical-list strong {
   color: var(--color-text-primary);
   font-weight: 600;
+}
+
+/* ── Alternating card layout ──────────────────────── */
+.product-card.reverse {
+  direction: rtl;
+}
+
+.product-card.reverse > * {
+  direction: ltr;
 }
 
 /* ── Responsive ────────────────────────────────────── */
