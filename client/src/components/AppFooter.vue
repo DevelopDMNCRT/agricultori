@@ -96,7 +96,7 @@ import { Icon } from '@iconify/vue'
               <div class="contact-icon-box">
                 <Icon icon="lucide:map-pin" width="16" height="16" />
               </div>
-              <span class="contact-text">Guadalajara, Jalisco, México</span>
+              <span class="contact-text">México</span>
             </li>
           </ul>
           <router-link to="/contacto" class="contact-cta-btn">

@@ -7,129 +7,122 @@
       </div>
 
       <div class="services-grid">
-        <!-- Card 1: Productos -->
-        <div class="service-card" @mouseenter="hovered = 1" @mouseleave="hovered = 0">
-          <div class="card-glow" :class="{ 'active': hovered === 1 }"></div>
+        <div 
+          v-for="service in displayedServices" 
+          :key="service.id" 
+          class="service-card"
+          :class="{ 'highlight-card': service.highlight }"
+          @mouseenter="hovered = service.id" 
+          @mouseleave="hovered = 0"
+        >
+          <div class="card-glow" :class="{ 'active': hovered === service.id, 'accent': service.highlight }"></div>
           
           <div class="card-content">
-            <div class="card-icon-wrapper">
-              <Icon icon="lucide:flask-conical" class="card-icon" />
+            <div class="card-icon-wrapper" :class="{ 'accent': service.highlight }">
+              <Icon :icon="service.icon" class="card-icon" />
             </div>
-            <h3 class="card-title">Productos</h3>
-            <p class="card-text">
-              Es una sección donde te daremos a conocer los productos agro químicos autorizados para la exportación de su fruta, también para que puedas buscar los productos que tengan el mismo ingrediente activo o técnico.
+            <h3 class="card-title" :class="{ 'text-white': service.highlight }">{{ service.title }}</h3>
+            <p class="card-text" :class="{ 'text-light': service.highlight }">
+              {{ service.text }}
             </p>
-            <div class="card-footer-badge">
-              <Icon icon="lucide:smartphone" class="badge-icon" />
-              <span>Disponible en la App</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Card 2: Precios (Highlighted with branding primary colors) -->
-        <div class="service-card highlight-card" @mouseenter="hovered = 2" @mouseleave="hovered = 0">
-          <div class="card-glow accent" :class="{ 'active': hovered === 2 }"></div>
-          
-          <div class="card-content">
-            <div class="card-icon-wrapper accent">
-              <Icon icon="lucide:trending-up" class="card-icon" />
-            </div>
-            <h3 class="card-title text-white">Precios</h3>
-            <p class="card-text text-light">
-              En esta sección te informaremos los precios al día, ya que a muchos se nos complica tener esa información a la mano.
-            </p>
-            <div class="card-footer-badge accent">
-              <Icon icon="lucide:smartphone" class="badge-icon" />
-              <span>Disponible en la App</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Card 3: Empaques Certificados -->
-        <div class="service-card" @mouseenter="hovered = 3" @mouseleave="hovered = 0">
-          <div class="card-glow" :class="{ 'active': hovered === 3 }"></div>
-          
-          <div class="card-content">
-            <div class="card-icon-wrapper">
-              <Icon icon="lucide:warehouse" class="card-icon" />
-            </div>
-            <h3 class="card-title">Empaques Certificados</h3>
-            <p class="card-text">
-              Es esta sección podrás conocer los empaques que están autorizados para comercializar la fruta en Estados Unidos.
-            </p>
-            <div class="card-footer-badge">
-              <Icon icon="lucide:smartphone" class="badge-icon" />
-              <span>Disponible en la App</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Card 4: Trabajo Diario -->
-        <div class="service-card" @mouseenter="hovered = 4" @mouseleave="hovered = 0">
-          <div class="card-glow" :class="{ 'active': hovered === 4 }"></div>
-          
-          <div class="card-content">
-            <div class="card-icon-wrapper">
-              <Icon icon="lucide:calendar-check" class="card-icon" />
-            </div>
-            <h3 class="card-title">Trabajo Diario</h3>
-            <p class="card-text">
-              Aquí podrás tener un apartado de pendientes que tengas que hacer para tu huerta.
-            </p>
-            <div class="card-footer-badge">
-              <Icon icon="lucide:smartphone" class="badge-icon" />
-              <span>Disponible en la App</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Card 5: Requisitos de Certificación (Highlighted for staggered checkerboard effect) -->
-        <div class="service-card highlight-card" @mouseenter="hovered = 5" @mouseleave="hovered = 0">
-          <div class="card-glow accent" :class="{ 'active': hovered === 5 }"></div>
-          
-          <div class="card-content">
-            <div class="card-icon-wrapper accent">
-              <Icon icon="lucide:scroll" class="card-icon" />
-            </div>
-            <h3 class="card-title text-white">Requisitos de Certificación</h3>
-            <p class="card-text text-light">
-              Ahora, si es tu deseo certificar tu huerta, te daremos la información necesaria para que puedas registrarlas en global gap y senasica, así como la lista de todos los requisitos que ocupas en tus huertos para iniciar los trámites.
-            </p>
-            <div class="card-footer-badge accent">
-              <Icon icon="lucide:smartphone" class="badge-icon" />
-              <span>Disponible en la App</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Card 6: Bitácoras -->
-        <div class="service-card" @mouseenter="hovered = 6" @mouseleave="hovered = 0">
-          <div class="card-glow" :class="{ 'active': hovered === 6 }"></div>
-          
-          <div class="card-content">
-            <div class="card-icon-wrapper">
-              <Icon icon="lucide:clipboard-list" class="card-icon" />
-            </div>
-            <h3 class="card-title">Bitácoras</h3>
-            <p class="card-text">
-              Sabemos lo importante de las bitácoras y llevarlas día a día, por eso en la aplicación Agricultori te daremos las bitácoras que necesitas y ejemplos de cómo se llenan para las dudas que puedan tener en algunas de ellas.
-            </p>
-            <div class="card-footer-badge">
+            <div class="card-footer-badge" :class="{ 'accent': service.highlight }">
               <Icon icon="lucide:smartphone" class="badge-icon" />
               <span>Disponible en la App</span>
             </div>
           </div>
         </div>
       </div>
+
+      <!-- "Ver más" button, shown only when limited -->
+      <div v-if="limit && services.length > limit" class="view-more-container">
+        <router-link to="/nuestra-app" class="btn btn-accent btn-view-more">
+          <span>Ver todos los servicios</span>
+          <Icon icon="lucide:arrow-right" />
+        </router-link>
+      </div>
+
     </div>
   </section>
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { Icon } from '@iconify/vue'
 
+const props = defineProps({
+  limit: {
+    type: Number,
+    default: null
+  }
+})
+
+const services = [
+  {
+    id: 1,
+    title: 'Productos',
+    text: 'Es una sección donde te daremos a conocer los productos agro químicos autorizados para la exportación de su fruta, también para que puedas buscar los productos que tengan el mismo ingrediente activo o técnico.',
+    icon: 'lucide:flask-conical',
+    highlight: false
+  },
+  {
+    id: 2,
+    title: 'Precios',
+    text: 'En esta sección te informaremos los precios al día, ya que a muchos se nos complica tener esa información a la mano.',
+    icon: 'lucide:trending-up',
+    highlight: true
+  },
+  {
+    id: 3,
+    title: 'Empaques Certificados',
+    text: 'Es esta sección podrás conocer los empaques que están autorizados para comercializar la fruta en Estados Unidos.',
+    icon: 'lucide:warehouse',
+    highlight: false
+  },
+  {
+    id: 4,
+    title: 'Trabajo Diario',
+    text: 'Aquí podrás tener un apartado de pendientes que tengas que hacer para tu huerta.',
+    icon: 'lucide:calendar-check',
+    highlight: false
+  },
+  {
+    id: 5,
+    title: 'Requisitos de Certificación',
+    text: 'Ahora, si es tu deseo certificar tu huerta, te daremos la información necesaria para que puedas registrarlas en global gap y senasica, así como la lista de todos los requisitos que ocupas en tus huertos para iniciar los trámites.',
+    icon: 'lucide:scroll',
+    highlight: true
+  },
+  {
+    id: 6,
+    title: 'Bitácoras',
+    text: 'Sabemos lo importante de las bitácoras y llevarlas día a día, por eso en la aplicación Agricultori te daremos las bitácoras que necesitas y ejemplos de cómo se llenan para las dudas que puedan tener en algunas de ellas.',
+    icon: 'lucide:clipboard-list',
+    highlight: false
+  },
+  {
+    id: 7,
+    title: 'Brújula y Altímetro',
+    text: 'Utiliza las herramientas de orientación y altitud sobre el nivel del mar en tiempo real para planificar el trazo de tus huertas.',
+    icon: 'lucide:compass',
+    highlight: false
+  },
+  {
+    id: 8,
+    title: 'Agricomercio',
+    text: 'Conecta con compradores y proveedores de insumos del campo, eliminando intermediarios para conseguir mejores condiciones comerciales.',
+    icon: 'lucide:shopping-cart',
+    highlight: true
+  }
+]
+
 const hovered = ref(0)
+
+const displayedServices = computed(() => {
+  if (props.limit) {
+    return services.slice(0, props.limit)
+  }
+  return services
+})
 </script>
 
 <style scoped>
@@ -312,5 +305,15 @@ const hovered = ref(0)
 
 .service-card:hover .card-glow {
   opacity: 1;
+}
+
+.view-more-container {
+  margin-top: 4.5rem;
+  display: flex;
+  justify-content: center;
+}
+
+.btn-view-more {
+  box-shadow: var(--shadow-accent);
 }
 </style>

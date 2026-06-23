@@ -284,7 +284,7 @@ const slides = [
     id: "descarga",
     badge: "Del Campo a tus Manos",
     titleHTML: `<span>¡Del campo</span><br/><span>a tus manos!</span><br/><span>Descarga la App</span>`,
-    desc: "Buscador de agroquímicos autorizados, alertas aduanales en vivo y directorios oficiales. 100% gratuito y libre de suscripciones.",
+    desc: "Buscador de agroquímicos autorizados, agricomercio y directorios oficiales. 100% gratuito y libre de suscripciones.",
     themeClass: "theme-descarga"
   },
   {

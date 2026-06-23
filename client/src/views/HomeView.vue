@@ -1,5 +1,6 @@
 <script setup>
 import AppHero from '../components/AppHero.vue'
+import HomeProducts from '../components/HomeProducts.vue'
 import AppServices from '../components/AppServices.vue'
 import DownloadCTA from '../components/DownloadCTA.vue'
 import ContactSection from '../components/ContactSection.vue'
@@ -8,7 +9,8 @@ import ContactSection from '../components/ContactSection.vue'
 <template>
   <div>
     <AppHero />
-    <AppServices />
+    <HomeProducts />
+    <AppServices :limit="3" />
     <DownloadCTA />
     <ContactSection />
   </div>
