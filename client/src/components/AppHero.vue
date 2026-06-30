@@ -147,7 +147,7 @@
                   
                   <!-- Splash Center Content (Logo Centered) -->
                   <div class="splash-content">
-                    <img src="/logo.png" alt="Agricultori Splash Logo" class="phone-splash-logo" />
+                    <img src="/admin-logo.png" alt="Agricultori Splash Logo" class="phone-splash-logo" />
                     <span class="splash-tagline">Agricultor Inteligente</span>
                   </div>
                   
@@ -283,7 +283,7 @@ const slides = [
   {
     id: "descarga",
     badge: "Del Campo a tus Manos",
-    titleHTML: `<span>¡Del campo</span><br/><span>a tus manos!</span><br/><span>Descarga la App</span>`,
+    titleHTML: `<span>Agricultori</span><br/><span>Descarga la App</span>`,
     desc: "Buscador de agroquímicos autorizados, agricomercio y directorios oficiales. 100% gratuito y libre de suscripciones.",
     themeClass: "theme-descarga"
   },

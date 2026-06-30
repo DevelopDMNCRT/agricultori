@@ -1,13 +1,21 @@
 <template>
   <AdminLayout>
-    <div class="flex items-center justify-between mb-6">
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
       <h2 class="text-xl font-bold text-gray-800 dark:text-white/90">Distribuidoras</h2>
-      <router-link
-        to="/distribuidoras/nueva"
-        class="rounded-lg bg-brand-500 px-4 py-2 text-sm font-medium text-white hover:bg-brand-600 focus:outline-none focus:ring-4 focus:ring-brand-300 dark:bg-brand-500 dark:hover:bg-brand-600 dark:focus:ring-brand-800"
-      >
-        Agregar nuevo
-      </router-link>
+      <div class="flex items-center gap-3 w-full sm:w-auto">
+        <input 
+          v-model="searchQuery"
+          type="text" 
+          placeholder="Buscar nombre, estado o ciudad..."
+          class="w-full sm:w-64 rounded-lg border border-gray-300 px-4 py-2 text-sm focus:border-brand-500 focus:outline-none focus:ring-1 focus:ring-brand-500 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+        />
+        <router-link
+          to="/distribuidoras/nueva"
+          class="rounded-lg bg-brand-500 px-4 py-2 text-sm font-medium text-white hover:bg-brand-600 focus:outline-none focus:ring-4 focus:ring-brand-300 dark:bg-brand-500 dark:hover:bg-brand-600 dark:focus:ring-brand-800 whitespace-nowrap"
+        >
+          Agregar nuevo
+        </router-link>
+      </div>
     </div>
 
     <!-- Error global -->
@@ -21,14 +29,29 @@
         <table class="min-w-full">
           <thead>
             <tr class="border-b border-gray-200 dark:border-gray-700">
-              <th class="px-5 py-3 text-left sm:px-6">
-                <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">Nombre</p>
+              <th class="px-5 py-3 text-left sm:px-6 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800/50 group" @click="toggleSort('nombre')">
+                <div class="flex items-center gap-2">
+                  <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">Nombre</p>
+                  <ChevronUp v-if="sortColumn === 'nombre' && sortDirection === 'asc'" class="w-4 h-4 text-brand-500" />
+                  <ChevronDown v-else-if="sortColumn === 'nombre' && sortDirection === 'desc'" class="w-4 h-4 text-brand-500" />
+                  <ChevronDown v-else class="w-4 h-4 text-gray-300 dark:text-gray-600 opacity-0 group-hover:opacity-100" />
+                </div>
               </th>
-              <th class="px-5 py-3 text-left sm:px-6">
-                <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">Estado</p>
+              <th class="px-5 py-3 text-left sm:px-6 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800/50 group" @click="toggleSort('estado')">
+                <div class="flex items-center gap-2">
+                  <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">Estado</p>
+                  <ChevronUp v-if="sortColumn === 'estado' && sortDirection === 'asc'" class="w-4 h-4 text-brand-500" />
+                  <ChevronDown v-else-if="sortColumn === 'estado' && sortDirection === 'desc'" class="w-4 h-4 text-brand-500" />
+                  <ChevronDown v-else class="w-4 h-4 text-gray-300 dark:text-gray-600 opacity-0 group-hover:opacity-100" />
+                </div>
               </th>
-              <th class="px-5 py-3 text-left sm:px-6">
-                <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">Ciudad</p>
+              <th class="px-5 py-3 text-left sm:px-6 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800/50 group" @click="toggleSort('ciudad')">
+                <div class="flex items-center gap-2">
+                  <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">Ciudad</p>
+                  <ChevronUp v-if="sortColumn === 'ciudad' && sortDirection === 'asc'" class="w-4 h-4 text-brand-500" />
+                  <ChevronDown v-else-if="sortColumn === 'ciudad' && sortDirection === 'desc'" class="w-4 h-4 text-brand-500" />
+                  <ChevronDown v-else class="w-4 h-4 text-gray-300 dark:text-gray-600 opacity-0 group-hover:opacity-100" />
+                </div>
               </th>
               <th class="px-5 py-3 text-left sm:px-6">
                 <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">Domicilio</p>
@@ -49,7 +72,7 @@
               </td>
             </tr>
             <template v-else>
-              <tr v-for="item in distribuidoras" :key="item.id" class="border-t border-gray-100 dark:border-gray-800">
+              <tr v-for="item in paginatedDistribuidoras" :key="item.id" class="border-t border-gray-100 dark:border-gray-800">
                 <td class="px-5 py-4 sm:px-6">
                   <p class="text-gray-800 text-theme-sm dark:text-white/90">{{ item.nombre }}</p>
                 </td>
@@ -86,20 +109,101 @@
           </tbody>
         </table>
       </div>
+
+      <!-- Pagination Controls -->
+      <div v-if="totalPages > 1" class="flex items-center justify-between px-5 py-4 border-t border-gray-200 dark:border-gray-800">
+        <span class="text-sm text-gray-500 dark:text-gray-400">
+          Mostrando página {{ currentPage }} de {{ totalPages }}
+        </span>
+        <div class="flex gap-2">
+          <button 
+            @click="prevPage" 
+            :disabled="currentPage === 1"
+            class="px-3 py-1 rounded border border-gray-200 dark:border-gray-700 text-sm font-medium hover:bg-gray-50 dark:hover:bg-gray-800 disabled:opacity-50 disabled:cursor-not-allowed text-gray-700 dark:text-gray-300"
+          >
+            Anterior
+          </button>
+          <button 
+            @click="nextPage" 
+            :disabled="currentPage === totalPages"
+            class="px-3 py-1 rounded border border-gray-200 dark:border-gray-700 text-sm font-medium hover:bg-gray-50 dark:hover:bg-gray-800 disabled:opacity-50 disabled:cursor-not-allowed text-gray-700 dark:text-gray-300"
+          >
+            Siguiente
+          </button>
+        </div>
+      </div>
     </div>
   </AdminLayout>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed, watch } from 'vue';
 import AdminLayout from '@/components/layout/AdminLayout.vue';
-import { Eye, Pencil, Trash } from 'lucide-vue-next';
+import { Eye, Pencil, Trash, ChevronUp, ChevronDown } from 'lucide-vue-next';
 
 const API_URL = `${import.meta.env.VITE_API_URL || 'http://localhost:3000'}/api/distribuidoras`;
 
 const distribuidoras = ref<any[]>([]);
 const loading = ref(false);
 const apiError = ref('');
+
+const currentPage = ref(1);
+const itemsPerPage = 10;
+const searchQuery = ref('');
+
+const filteredDistribuidoras = computed(() => {
+  if (!searchQuery.value) return distribuidoras.value;
+  const lowerQuery = searchQuery.value.toLowerCase();
+  return distribuidoras.value.filter((d: any) => 
+    (d.nombre && d.nombre.toLowerCase().includes(lowerQuery)) ||
+    (d.estado && d.estado.toLowerCase().includes(lowerQuery)) ||
+    (d.ciudad && d.ciudad.toLowerCase().includes(lowerQuery))
+  );
+});
+
+const sortColumn = ref('nombre');
+const sortDirection = ref('asc');
+
+const toggleSort = (column: string) => {
+  if (sortColumn.value === column) {
+    sortDirection.value = sortDirection.value === 'asc' ? 'desc' : 'asc';
+  } else {
+    sortColumn.value = column;
+    sortDirection.value = 'asc';
+  }
+};
+
+const sortedDistribuidoras = computed(() => {
+  const result = [...filteredDistribuidoras.value];
+  result.sort((a, b) => {
+    const valA = (a[sortColumn.value] || '').toLowerCase();
+    const valB = (b[sortColumn.value] || '').toLowerCase();
+    if (valA < valB) return sortDirection.value === 'asc' ? -1 : 1;
+    if (valA > valB) return sortDirection.value === 'asc' ? 1 : -1;
+    return 0;
+  });
+  return result;
+});
+
+watch(searchQuery, () => {
+  currentPage.value = 1;
+});
+
+const totalPages = computed(() => Math.ceil(sortedDistribuidoras.value.length / itemsPerPage));
+
+const paginatedDistribuidoras = computed(() => {
+  const start = (currentPage.value - 1) * itemsPerPage;
+  const end = start + itemsPerPage;
+  return sortedDistribuidoras.value.slice(start, end);
+});
+
+const nextPage = () => {
+  if (currentPage.value < totalPages.value) currentPage.value++;
+};
+
+const prevPage = () => {
+  if (currentPage.value > 1) currentPage.value--;
+};
 
 const fetchDistribuidoras = async () => {
   loading.value = true;
