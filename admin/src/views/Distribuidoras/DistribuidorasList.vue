@@ -59,7 +59,7 @@
                   <ChevronRight v-else class="w-5 h-5 text-brand-500/70 dark:text-brand-500/70" />
                   <span class="font-semibold text-brand-800 dark:text-brand-300 text-sm">{{ state.name }}</span>
                   <span class="px-2 py-0.5 rounded-full bg-brand-100 dark:bg-brand-800/50 text-xs text-brand-700 dark:text-brand-400 font-medium">
-                    {{ state.cities.reduce((acc, city) => acc + city.items.length, 0) }} distribuidoras
+                    {{ state.cities.reduce((acc: number, city: CityGroup) => acc + city.items.length, 0) }} distribuidoras
                   </span>
                 </div>
               </div>
