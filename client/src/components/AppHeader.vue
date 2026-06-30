@@ -186,18 +186,39 @@ const closeMenu = () => {
   isMenuOpen.value = false
 }
 
+const settingsOrder = ref(null)
+
 const fetchDistribuidores = async () => {
   try {
-    const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:3000'}/api/distribuidoras`)
-    const data = await res.json()
+    const baseUrl = import.meta.env.VITE_API_URL || 'http://localhost:3000'
+    const [distRes, settingsRes] = await Promise.all([
+      fetch(`${baseUrl}/api/distribuidoras`),
+      fetch(`${baseUrl}/api/settings/distribuidoras_order`)
+    ])
+    const data = await distRes.json()
     distribuidores.value = data
+    if (settingsRes.ok) {
+      settingsOrder.value = await settingsRes.json()
+    }
   } catch (err) {
     console.error('Error fetching distribuidores:', err)
   }
 }
 
 const uniqueEstados = computed(() => {
-  return [...new Set(distribuidores.value.map(d => d.estado))].sort()
+  const allEstados = [...new Set(distribuidores.value.map(d => d.estado))]
+  const savedOrder = settingsOrder.value?.states || []
+  if (savedOrder.length > 0) {
+    return allEstados.sort((a, b) => {
+      const idxA = savedOrder.indexOf(a)
+      const idxB = savedOrder.indexOf(b)
+      const orderA = idxA === -1 ? 999999 : idxA
+      const orderB = idxB === -1 ? 999999 : idxB
+      if (orderA !== orderB) return orderA - orderB
+      return a.localeCompare(b)
+    })
+  }
+  return allEstados.sort()
 })
 
 onMounted(() => {

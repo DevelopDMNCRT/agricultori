@@ -23,195 +23,257 @@
       {{ apiError }}
     </div>
 
-    <!-- Table -->
-    <div class="overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
-      <div class="max-w-full overflow-x-auto custom-scrollbar">
-        <table class="min-w-full">
-          <thead>
-            <tr class="border-b border-gray-200 dark:border-gray-700">
-              <th class="px-5 py-3 text-left sm:px-6 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800/50 group" @click="toggleSort('nombre')">
-                <div class="flex items-center gap-2">
-                  <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">Nombre</p>
-                  <ChevronUp v-if="sortColumn === 'nombre' && sortDirection === 'asc'" class="w-4 h-4 text-brand-500" />
-                  <ChevronDown v-else-if="sortColumn === 'nombre' && sortDirection === 'desc'" class="w-4 h-4 text-brand-500" />
-                  <ChevronDown v-else class="w-4 h-4 text-gray-300 dark:text-gray-600 opacity-0 group-hover:opacity-100" />
-                </div>
-              </th>
-              <th class="px-5 py-3 text-left sm:px-6 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800/50 group" @click="toggleSort('estado')">
-                <div class="flex items-center gap-2">
-                  <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">Estado</p>
-                  <ChevronUp v-if="sortColumn === 'estado' && sortDirection === 'asc'" class="w-4 h-4 text-brand-500" />
-                  <ChevronDown v-else-if="sortColumn === 'estado' && sortDirection === 'desc'" class="w-4 h-4 text-brand-500" />
-                  <ChevronDown v-else class="w-4 h-4 text-gray-300 dark:text-gray-600 opacity-0 group-hover:opacity-100" />
-                </div>
-              </th>
-              <th class="px-5 py-3 text-left sm:px-6 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800/50 group" @click="toggleSort('ciudad')">
-                <div class="flex items-center gap-2">
-                  <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">Ciudad</p>
-                  <ChevronUp v-if="sortColumn === 'ciudad' && sortDirection === 'asc'" class="w-4 h-4 text-brand-500" />
-                  <ChevronDown v-else-if="sortColumn === 'ciudad' && sortDirection === 'desc'" class="w-4 h-4 text-brand-500" />
-                  <ChevronDown v-else class="w-4 h-4 text-gray-300 dark:text-gray-600 opacity-0 group-hover:opacity-100" />
-                </div>
-              </th>
-              <th class="px-5 py-3 text-left sm:px-6">
-                <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">Domicilio</p>
-              </th>
-              <th class="px-5 py-3 text-left sm:px-6">
-                <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">Teléfono</p>
-              </th>
-              <th class="px-5 py-3 text-left sm:px-6">
-                <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">Acciones</p>
-              </th>
-            </tr>
-          </thead>
-          <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
-            <!-- Loading state -->
-            <tr v-if="loading">
-              <td colspan="6" class="px-5 py-8 text-center sm:px-6">
-                <p class="text-gray-500 text-theme-sm dark:text-gray-400">Cargando distribuidoras...</p>
-              </td>
-            </tr>
-            <template v-else>
-              <tr v-for="item in paginatedDistribuidoras" :key="item.id" class="border-t border-gray-100 dark:border-gray-800">
-                <td class="px-5 py-4 sm:px-6">
-                  <p class="text-gray-800 text-theme-sm dark:text-white/90">{{ item.nombre }}</p>
-                </td>
-                <td class="px-5 py-4 sm:px-6">
-                  <p class="text-gray-500 text-theme-sm dark:text-gray-400">{{ item.estado }}</p>
-                </td>
-                <td class="px-5 py-4 sm:px-6">
-                  <p class="text-gray-500 text-theme-sm dark:text-gray-400">{{ item.ciudad }}</p>
-                </td>
-                <td class="px-5 py-4 sm:px-6 max-w-xs truncate" :title="item.domicilio">
-                  <p class="text-gray-500 text-theme-sm dark:text-gray-400">{{ item.domicilio }}</p>
-                </td>
-                <td class="px-5 py-4 sm:px-6">
-                  <p class="text-gray-500 text-theme-sm dark:text-gray-400">{{ item.telefono }}</p>
-                </td>
-                <td class="px-5 py-4 sm:px-6 flex gap-3">
-                  <router-link :to="`/distribuidoras/ver/${item.id}`" class="text-brand-500 hover:text-brand-600" title="Ver detalles">
-                    <Eye class="w-5 h-5" />
-                  </router-link>
-                  <router-link :to="`/distribuidoras/editar/${item.id}`" class="text-warning-500 hover:text-warning-600" title="Editar">
-                    <Pencil class="w-5 h-5" />
-                  </router-link>
-                  <button @click="deleteItem(item.id)" class="text-error-500 hover:text-error-600" title="Borrar">
-                    <Trash class="w-5 h-5" />
-                  </button>
-                </td>
-              </tr>
-              <tr v-if="distribuidoras.length === 0">
-                <td colspan="6" class="px-5 py-8 text-center sm:px-6">
-                  <p class="text-gray-500 text-theme-sm dark:text-gray-400">No hay distribuidoras registradas</p>
-                </td>
-              </tr>
-            </template>
-          </tbody>
-        </table>
-      </div>
+    <div v-if="loading" class="p-8 text-center">
+      <p class="text-gray-500 text-theme-sm dark:text-gray-400">Cargando distribuidoras...</p>
+    </div>
 
-      <!-- Pagination Controls -->
-      <div v-if="totalPages > 1" class="flex items-center justify-between px-5 py-4 border-t border-gray-200 dark:border-gray-800">
-        <span class="text-sm text-gray-500 dark:text-gray-400">
-          Mostrando página {{ currentPage }} de {{ totalPages }}
-        </span>
-        <div class="flex gap-2">
-          <button 
-            @click="prevPage" 
-            :disabled="currentPage === 1"
-            class="px-3 py-1 rounded border border-gray-200 dark:border-gray-700 text-sm font-medium hover:bg-gray-50 dark:hover:bg-gray-800 disabled:opacity-50 disabled:cursor-not-allowed text-gray-700 dark:text-gray-300"
-          >
-            Anterior
-          </button>
-          <button 
-            @click="nextPage" 
-            :disabled="currentPage === totalPages"
-            class="px-3 py-1 rounded border border-gray-200 dark:border-gray-700 text-sm font-medium hover:bg-gray-50 dark:hover:bg-gray-800 disabled:opacity-50 disabled:cursor-not-allowed text-gray-700 dark:text-gray-300"
-          >
-            Siguiente
-          </button>
+    <div v-else class="overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
+      <div class="max-w-full overflow-x-auto custom-scrollbar min-w-[800px]">
+        <!-- Header -->
+        <div class="flex border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50 px-5 py-3 sm:px-6">
+          <div class="w-1/3 font-medium text-gray-500 text-theme-xs dark:text-gray-400">Distribuidora</div>
+          <div class="w-1/4 font-medium text-gray-500 text-theme-xs dark:text-gray-400">Domicilio</div>
+          <div class="w-1/5 font-medium text-gray-500 text-theme-xs dark:text-gray-400">Teléfono</div>
+          <div class="flex-1 font-medium text-gray-500 text-theme-xs dark:text-gray-400">Acciones</div>
         </div>
+
+        <div v-if="groupedList.length === 0" class="p-8 text-center">
+          <p class="text-gray-500 text-theme-sm dark:text-gray-400">No hay distribuidoras registradas</p>
+        </div>
+
+        <!-- Draggable States -->
+        <draggable 
+          v-model="groupedList" 
+          item-key="name" 
+          handle=".drag-state" 
+          @change="saveOrder"
+          :disabled="!!searchQuery"
+        >
+          <template #item="{ element: state }">
+            <div>
+              <!-- State Row -->
+              <div class="flex items-center px-5 py-3 sm:px-6 bg-brand-50/60 border-b border-brand-100/50 hover:bg-brand-50 dark:bg-brand-900/20 dark:border-brand-800/30 dark:hover:bg-brand-900/40 transition-colors">
+                <GripVertical v-if="!searchQuery" class="w-4 h-4 text-brand-400 mr-2 cursor-grab drag-state" />
+                <div class="flex items-center gap-2 cursor-pointer flex-1" @click="toggleState(state.name)">
+                  <ChevronDown v-if="expandedStates.has(state.name)" class="w-5 h-5 text-brand-600 dark:text-brand-400" />
+                  <ChevronRight v-else class="w-5 h-5 text-brand-500/70 dark:text-brand-500/70" />
+                  <span class="font-semibold text-brand-800 dark:text-brand-300 text-sm">{{ state.name }}</span>
+                  <span class="px-2 py-0.5 rounded-full bg-brand-100 dark:bg-brand-800/50 text-xs text-brand-700 dark:text-brand-400 font-medium">
+                    {{ state.cities.reduce((acc, city) => acc + city.items.length, 0) }} distribuidoras
+                  </span>
+                </div>
+              </div>
+              
+              <!-- State Content (Cities) -->
+              <div v-if="expandedStates.has(state.name)">
+                <draggable 
+                  v-model="state.cities" 
+                  item-key="name" 
+                  handle=".drag-city" 
+                  @change="saveOrder"
+                  :disabled="!!searchQuery"
+                >
+                  <template #item="{ element: city }">
+                    <div>
+                      <!-- City Row -->
+                      <div class="flex items-center px-5 py-2 sm:px-6 pl-10 border-b border-brand-50/50 bg-white hover:bg-brand-50/30 dark:bg-transparent dark:border-brand-900/10 dark:hover:bg-brand-900/20 transition-colors">
+                        <GripVertical v-if="!searchQuery" class="w-4 h-4 text-brand-300/70 mr-2 cursor-grab drag-city" />
+                        <div class="flex items-center gap-2 cursor-pointer flex-1" @click="toggleCity(`${state.name}-${city.name}`)">
+                          <ChevronDown v-if="expandedCities.has(`${state.name}-${city.name}`)" class="w-4 h-4 text-brand-500" />
+                          <ChevronRight v-else class="w-4 h-4 text-brand-400" />
+                          <span class="font-medium text-brand-700 dark:text-brand-400 text-sm">{{ city.name }}</span>
+                          <span class="text-xs text-brand-500/70 dark:text-brand-500/70">({{ city.items.length }})</span>
+                        </div>
+                      </div>
+
+                      <!-- City Content (Items) -->
+                      <div v-if="expandedCities.has(`${state.name}-${city.name}`)">
+                        <draggable 
+                          v-model="city.items" 
+                          item-key="id" 
+                          handle=".drag-item" 
+                          @change="saveOrder"
+                          :disabled="!!searchQuery"
+                        >
+                          <template #item="{ element: item }">
+                            <div class="flex items-center px-5 py-4 sm:px-6 pl-16 border-b border-gray-50 bg-white hover:bg-gray-50/50 dark:bg-transparent dark:border-gray-800/30 dark:hover:bg-gray-800/20 transition-colors group">
+                              <GripVertical v-if="!searchQuery" class="w-4 h-4 text-gray-300 opacity-0 group-hover:opacity-100 transition-opacity mr-2 cursor-grab drag-item" />
+                              <div class="w-1/3 pr-4">
+                                <p class="text-gray-800 text-theme-sm dark:text-white/90">{{ item.nombre }}</p>
+                              </div>
+                              <div class="w-1/4 pr-4">
+                                <p class="text-gray-500 text-theme-sm dark:text-gray-400 truncate" :title="item.domicilio">{{ item.domicilio }}</p>
+                              </div>
+                              <div class="w-1/5 pr-4">
+                                <p class="text-gray-500 text-theme-sm dark:text-gray-400">{{ item.telefono }}</p>
+                              </div>
+                              <div class="flex-1 flex gap-3">
+                                <router-link :to="`/distribuidoras/ver/${item.id}`" class="text-brand-500 hover:text-brand-600" title="Ver detalles">
+                                  <Eye class="w-5 h-5" />
+                                </router-link>
+                                <router-link :to="`/distribuidoras/editar/${item.id}`" class="text-warning-500 hover:text-warning-600" title="Editar">
+                                  <Pencil class="w-5 h-5" />
+                                </router-link>
+                                <button @click="deleteItem(item.id)" class="text-error-500 hover:text-error-600" title="Borrar">
+                                  <Trash class="w-5 h-5" />
+                                </button>
+                              </div>
+                            </div>
+                          </template>
+                        </draggable>
+                      </div>
+                    </div>
+                  </template>
+                </draggable>
+              </div>
+            </div>
+          </template>
+        </draggable>
       </div>
     </div>
   </AdminLayout>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, computed, watch } from 'vue';
+import { ref, onMounted, watch } from 'vue';
 import AdminLayout from '@/components/layout/AdminLayout.vue';
-import { Eye, Pencil, Trash, ChevronUp, ChevronDown } from 'lucide-vue-next';
+import { Eye, Pencil, Trash, ChevronDown, ChevronRight, GripVertical } from 'lucide-vue-next';
+import draggable from 'vuedraggable';
 
-const API_URL = `${import.meta.env.VITE_API_URL || 'http://localhost:3000'}/api/distribuidoras`;
+const API_URL = `${import.meta.env.VITE_API_URL || 'http://localhost:3000'}/api`;
 
-const distribuidoras = ref<any[]>([]);
+interface Distribuidora {
+  id: number;
+  nombre: string;
+  estado: string;
+  ciudad: string;
+  domicilio: string;
+  telefono: string;
+  orden: number;
+}
+
+interface CityGroup {
+  name: string;
+  items: Distribuidora[];
+}
+
+interface StateGroup {
+  name: string;
+  cities: CityGroup[];
+}
+
+const distribuidoras = ref<Distribuidora[]>([]);
+const groupedList = ref<StateGroup[]>([]);
 const loading = ref(false);
 const apiError = ref('');
 
-const currentPage = ref(1);
-const itemsPerPage = 10;
+const expandedStates = ref<Set<string>>(new Set());
+const expandedCities = ref<Set<string>>(new Set());
 const searchQuery = ref('');
 
-const filteredDistribuidoras = computed(() => {
-  if (!searchQuery.value) return distribuidoras.value;
-  const lowerQuery = searchQuery.value.toLowerCase();
-  return distribuidoras.value.filter((d: any) => 
-    (d.nombre && d.nombre.toLowerCase().includes(lowerQuery)) ||
-    (d.estado && d.estado.toLowerCase().includes(lowerQuery)) ||
-    (d.ciudad && d.ciudad.toLowerCase().includes(lowerQuery))
-  );
-});
+let savedSettingsOrder: any = null;
 
-const sortColumn = ref('nombre');
-const sortDirection = ref('asc');
+const toggleState = (stateName: string) => {
+  if (expandedStates.value.has(stateName)) expandedStates.value.delete(stateName);
+  else expandedStates.value.add(stateName);
+};
 
-const toggleSort = (column: string) => {
-  if (sortColumn.value === column) {
-    sortDirection.value = sortDirection.value === 'asc' ? 'desc' : 'asc';
-  } else {
-    sortColumn.value = column;
-    sortDirection.value = 'asc';
+const toggleCity = (cityName: string) => {
+  if (expandedCities.value.has(cityName)) expandedCities.value.delete(cityName);
+  else expandedCities.value.add(cityName);
+};
+
+// Computes the grouped hierarchy from the flat array, applying search filters and custom ordering
+const buildHierarchy = () => {
+  let filtered = distribuidoras.value;
+  
+  if (searchQuery.value) {
+    const q = searchQuery.value.toLowerCase();
+    filtered = filtered.filter(d => 
+      (d.nombre && d.nombre.toLowerCase().includes(q)) ||
+      (d.estado && d.estado.toLowerCase().includes(q)) ||
+      (d.ciudad && d.ciudad.toLowerCase().includes(q))
+    );
   }
-};
 
-const sortedDistribuidoras = computed(() => {
-  const result = [...filteredDistribuidoras.value];
-  result.sort((a, b) => {
-    const valA = (a[sortColumn.value] || '').toLowerCase();
-    const valB = (b[sortColumn.value] || '').toLowerCase();
-    if (valA < valB) return sortDirection.value === 'asc' ? -1 : 1;
-    if (valA > valB) return sortDirection.value === 'asc' ? 1 : -1;
-    return 0;
+  const groups: Record<string, Record<string, Distribuidora[]>> = {};
+  filtered.forEach(d => {
+    const estado = d.estado || 'Sin Estado';
+    const ciudad = d.ciudad || 'Sin Ciudad';
+    if (!groups[estado]) groups[estado] = {};
+    if (!groups[estado][ciudad]) groups[estado][ciudad] = [];
+    groups[estado][ciudad].push(d);
   });
-  return result;
-});
 
-watch(searchQuery, () => {
-  currentPage.value = 1;
-});
+  const stateOrder = savedSettingsOrder?.states || [];
+  const cityOrderMap = savedSettingsOrder?.cities || {};
 
-const totalPages = computed(() => Math.ceil(sortedDistribuidoras.value.length / itemsPerPage));
+  const result: StateGroup[] = [];
 
-const paginatedDistribuidoras = computed(() => {
-  const start = (currentPage.value - 1) * itemsPerPage;
-  const end = start + itemsPerPage;
-  return sortedDistribuidoras.value.slice(start, end);
-});
+  const getOrderIndex = (arr: string[], val: string) => {
+    const idx = arr.indexOf(val);
+    return idx === -1 ? 999999 : idx;
+  };
 
-const nextPage = () => {
-  if (currentPage.value < totalPages.value) currentPage.value++;
+  Object.keys(groups).forEach(stateName => {
+    const citiesResult: CityGroup[] = [];
+    
+    Object.keys(groups[stateName]).forEach(cityName => {
+      // Items are already sorted by 'orden' from the backend query
+      citiesResult.push({
+        name: cityName,
+        items: groups[stateName][cityName]
+      });
+    });
+
+    // Sort cities by saved order or alphabetically
+    citiesResult.sort((a, b) => {
+      const citiesOrder = cityOrderMap[stateName] || [];
+      const idxA = getOrderIndex(citiesOrder, a.name);
+      const idxB = getOrderIndex(citiesOrder, b.name);
+      if (idxA !== idxB) return idxA - idxB;
+      return a.name.localeCompare(b.name);
+    });
+
+    result.push({
+      name: stateName,
+      cities: citiesResult
+    });
+  });
+
+  // Sort states by saved order or alphabetically
+  result.sort((a, b) => {
+    const idxA = getOrderIndex(stateOrder, a.name);
+    const idxB = getOrderIndex(stateOrder, b.name);
+    if (idxA !== idxB) return idxA - idxB;
+    return a.name.localeCompare(b.name);
+  });
+
+  groupedList.value = result;
 };
 
-const prevPage = () => {
-  if (currentPage.value > 1) currentPage.value--;
+watch(searchQuery, buildHierarchy);
+
+const fetchSettings = async () => {
+  try {
+    const res = await fetch(`${API_URL}/settings/distribuidoras_order`);
+    if (res.ok) {
+      savedSettingsOrder = await res.json();
+    }
+  } catch (e) {
+    console.error('No se pudo cargar la configuración de orden');
+  }
 };
 
 const fetchDistribuidoras = async () => {
   loading.value = true;
   apiError.value = '';
   try {
-    const res = await fetch(API_URL);
+    await fetchSettings();
+    const res = await fetch(`${API_URL}/distribuidoras`);
     if (!res.ok) throw new Error('Error al obtener distribuidoras');
     distribuidoras.value = await res.json();
+    buildHierarchy();
   } catch (e: any) {
     apiError.value = e.message;
   } finally {
@@ -219,10 +281,52 @@ const fetchDistribuidoras = async () => {
   }
 };
 
+// Fired when dragging ends
+const saveOrder = async () => {
+  // 1. Save settings (States and Cities order)
+  const newOrder = {
+    states: groupedList.value.map(s => s.name),
+    cities: {} as Record<string, string[]>
+  };
+  
+  let currentItemOrder = 0;
+  const itemUpdates: {id: number, orden: number}[] = [];
+
+  groupedList.value.forEach(state => {
+    newOrder.cities[state.name] = state.cities.map(c => c.name);
+    state.cities.forEach(city => {
+      city.items.forEach(item => {
+        itemUpdates.push({ id: item.id, orden: currentItemOrder++ });
+      });
+    });
+  });
+
+  savedSettingsOrder = newOrder;
+
+  try {
+    // Update settings in background
+    fetch(`${API_URL}/settings/distribuidoras_order`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(newOrder)
+    });
+
+    // Update items orden in background
+    fetch(`${API_URL}/distribuidoras/reorder`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(itemUpdates)
+    });
+    
+  } catch (e) {
+    console.error('Error al guardar el nuevo orden', e);
+  }
+};
+
 const deleteItem = async (id: number) => {
   if (!confirm('¿Estás seguro de que deseas borrar esta distribuidora?')) return;
   try {
-    const res = await fetch(`${API_URL}/${id}`, { method: 'DELETE' });
+    const res = await fetch(`${API_URL}/distribuidoras/${id}`, { method: 'DELETE' });
     if (!res.ok) {
       const data = await res.json();
       apiError.value = data.error || 'Error al eliminar';

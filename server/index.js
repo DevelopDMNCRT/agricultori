@@ -6,6 +6,7 @@ const pool = require('./db');
 const usuariosRoutes = require('./routes/usuarios');
 const distribuidorasRoutes = require('./routes/distribuidoras');
 const productosRoutes = require('./routes/productos');
+const settingsRoutes = require('./routes/settings');
 const path = require('path');
 
 const app = express();
@@ -19,6 +20,7 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use('/api/usuarios', usuariosRoutes);
 app.use('/api/distribuidoras', distribuidorasRoutes);
 app.use('/api/productos', productosRoutes);
+app.use('/api/settings', settingsRoutes);
 
 // Health check
 app.get('/api/health', (req, res) => {
@@ -49,9 +51,15 @@ const initDB = async () => {
         domicilio TEXT NOT NULL,
         referencias TEXT,
         telefono CHAR(10) NOT NULL,
+        orden INT DEFAULT 0,
         created_at TIMESTAMP DEFAULT NOW(),
         edited_at TIMESTAMP,
         deleted_at TIMESTAMP
+      );
+
+      CREATE TABLE IF NOT EXISTS app_settings (
+        key VARCHAR(100) PRIMARY KEY,
+        value JSONB NOT NULL
       );
 
       CREATE TABLE IF NOT EXISTS productos (

@@ -6,7 +6,7 @@ const fs = require('fs');
 const getDistribuidoras = async (req, res) => {
   try {
     const result = await pool.query(
-      'SELECT id, nombre, estado, ciudad, domicilio, referencias, telefono, created_at, edited_at FROM distribuidoras WHERE deleted_at IS NULL ORDER BY created_at DESC'
+      'SELECT id, nombre, estado, ciudad, domicilio, referencias, telefono, orden, created_at, edited_at FROM distribuidoras WHERE deleted_at IS NULL ORDER BY orden ASC, created_at DESC'
     );
     res.json(result.rows);
   } catch (err) {
@@ -116,4 +116,36 @@ const deleteDistribuidora = async (req, res) => {
   }
 };
 
-module.exports = { getDistribuidoras, getDistribuidora, createDistribuidora, updateDistribuidora, deleteDistribuidora };
+// PUT reorder distribuidoras (bulk update)
+const reorderDistribuidoras = async (req, res) => {
+  try {
+    const items = req.body; // Array of { id, orden }
+    if (!Array.isArray(items)) {
+      return res.status(400).json({ error: 'Formato incorrecto. Se espera un arreglo de elementos.' });
+    }
+
+    const client = await pool.connect();
+    try {
+      await client.query('BEGIN');
+      for (const item of items) {
+        await client.query(
+          'UPDATE distribuidoras SET orden = $1 WHERE id = $2 AND deleted_at IS NULL',
+          [item.orden, item.id]
+        );
+      }
+      await client.query('COMMIT');
+    } catch (e) {
+      await client.query('ROLLBACK');
+      throw e;
+    } finally {
+      client.release();
+    }
+
+    res.json({ message: 'Orden actualizado correctamente' });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Error al reordenar distribuidoras' });
+  }
+};
+
+module.exports = { getDistribuidoras, getDistribuidora, createDistribuidora, updateDistribuidora, deleteDistribuidora, reorderDistribuidoras };

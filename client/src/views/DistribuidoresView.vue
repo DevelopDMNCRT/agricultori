@@ -7,25 +7,32 @@ import DownloadCTA from '../components/DownloadCTA.vue'
 const route = useRoute()
 const router = useRouter()
 
-const API_URL = `${import.meta.env.VITE_API_URL || 'http://localhost:3000'}/api/distribuidoras`
+const API_URL = `${import.meta.env.VITE_API_URL || 'http://localhost:3000'}/api`
 const distribuidores = ref([])
 const loading = ref(true)
+const settingsOrder = ref(null)
 
 const selectedEstado = ref('')
 const selectedCiudad = ref('')
 
 onMounted(async () => {
   try {
-    const res = await fetch(API_URL)
-    const data = await res.json()
+    const [distRes, settingsRes] = await Promise.all([
+      fetch(`${API_URL}/distribuidoras`),
+      fetch(`${API_URL}/settings/distribuidoras_order`)
+    ])
+    const data = await distRes.json()
     distribuidores.value = data
+    if (settingsRes.ok) {
+      settingsOrder.value = await settingsRes.json()
+    }
     
     if (distribuidores.value.length > 0) {
-      const uniqueEstados = [...new Set(data.map(d => d.estado))].sort()
-      if (route.params.estado && uniqueEstados.includes(route.params.estado)) {
+      const estados = uniqueEstados.value
+      if (route.params.estado && estados.includes(route.params.estado)) {
         selectedEstado.value = route.params.estado
-      } else if (uniqueEstados.length > 0) {
-        selectedEstado.value = uniqueEstados[0]
+      } else if (estados.length > 0) {
+        selectedEstado.value = estados[0]
       }
     }
   } catch (error) {
@@ -36,7 +43,19 @@ onMounted(async () => {
 })
 
 const uniqueEstados = computed(() => {
-  return [...new Set(distribuidores.value.map(d => d.estado))].sort()
+  const allEstados = [...new Set(distribuidores.value.map(d => d.estado))]
+  const savedOrder = settingsOrder.value?.states || []
+  if (savedOrder.length > 0) {
+    return allEstados.sort((a, b) => {
+      const idxA = savedOrder.indexOf(a)
+      const idxB = savedOrder.indexOf(b)
+      const orderA = idxA === -1 ? 999999 : idxA
+      const orderB = idxB === -1 ? 999999 : idxB
+      if (orderA !== orderB) return orderA - orderB
+      return a.localeCompare(b)
+    })
+  }
+  return allEstados.sort()
 })
 
 const distribuidoresByEstado = computed(() => {
@@ -44,7 +63,19 @@ const distribuidoresByEstado = computed(() => {
 })
 
 const uniqueCiudades = computed(() => {
-  return [...new Set(distribuidoresByEstado.value.map(d => d.ciudad))].sort()
+  const allCiudades = [...new Set(distribuidoresByEstado.value.map(d => d.ciudad))]
+  const savedCitiesOrder = settingsOrder.value?.cities?.[selectedEstado.value] || []
+  if (savedCitiesOrder.length > 0) {
+    return allCiudades.sort((a, b) => {
+      const idxA = savedCitiesOrder.indexOf(a)
+      const idxB = savedCitiesOrder.indexOf(b)
+      const orderA = idxA === -1 ? 999999 : idxA
+      const orderB = idxB === -1 ? 999999 : idxB
+      if (orderA !== orderB) return orderA - orderB
+      return a.localeCompare(b)
+    })
+  }
+  return allCiudades.sort()
 })
 
 watch(
