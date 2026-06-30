@@ -208,6 +208,10 @@ const router = createRouter({
         title: 'Signup',
       },
     },
+    {
+      path: '/:pathMatch(.*)*',
+      redirect: '/error-404'
+    }
   ],
 })
 
